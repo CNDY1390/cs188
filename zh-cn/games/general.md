@@ -1,0 +1,17 @@
+---
+title: 3.4 General Games
+parent: 3. 博弈
+nav_order: 4
+layout: page
+header-includes:
+    \pagenumbering{gobble}
+lang: zh-cn
+---
+
+# 3.4 General Games (通用博弈)
+
+并非所有博弈都是零和的。实际上，不同的代理在博弈中可能有着并不直接涉及彼此严格竞争的不同任务。这样的博弈可以用以 **multi-agent utilities**（多智能体效用）为特征的树来设置。这种效用不是交替代理试图最小化或最大化的单个值，而是表示为元组，元组内的不同值对应于不同代理的唯一效用。然后，每个代理都试图在其控制的每个节点上最大化自己的效用，而忽略其他代理的效用。考虑下面的树：
+
+<img src="{{ site.baseurl }}/assets/images/multi-agent-utility.png" alt="Multi-Agent Utility" />
+
+红色、绿色和蓝色节点对应于三个独立的代理，它们分别从各自层级的可能选项中最大化红色、绿色和蓝色效用。通过这个例子，最终在树的顶部产生了效用元组 $(5, 2, 5)$。具有多智能体效用的通用博弈是通过计算产生行为的一个典型例子，因为这样的设置会引发合作，因为在树的根部选择的效用往往会为所有参与的代理产生合理的效用。
