@@ -6,15 +6,15 @@ var languages = [];
 {%- if site.languages and site.languages.size > 0 -%}
   {%- for lang in site.languages -%}
   languages.push({
-    code: "{{ lang.code }}",
-    name: "{{ lang.name }}",
-    flag: "{{ lang.flag }}",
-    path: "{{ lang.path }}"
+    code: {{ lang.code | jsonify }},
+    name: {{ lang.name | jsonify }},
+    flag: {{ lang.flag | jsonify }},
+    path: {{ lang.path | jsonify }}
   });
   {%- endfor -%}
 {%- endif -%}
 
-var basePath = '{{ site.baseurl }}' || '';
+var basePath = {{ site.baseurl | jsonify }} || '';
 // Normalize basePath
 if (basePath && basePath.charAt(basePath.length - 1) === '/') {
   basePath = basePath.slice(0, -1);
@@ -173,7 +173,7 @@ document.addEventListener('click', function(event) {
         <a href="#" 
            data-lang="{{ lang.code }}"
            class="language-option"
-           onclick="if(typeof window.switchLanguage==='function'){window.switchLanguage('{{ lang.code }}');}else{console.error('switchLanguage not defined');}return false;">
+           onclick="if(typeof window.switchLanguage==='function'){window.switchLanguage({{ lang.code | jsonify }});}else{console.error('switchLanguage not defined');}return false;">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>
