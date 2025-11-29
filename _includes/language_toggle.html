@@ -20,7 +20,7 @@
     <div id="lang-menu" class="lang-menu" style="display: none;">
       {%- for lang in site.languages -%}
         {%- if lang.code != current_lang -%}
-        <div onclick="switchLang('{{ lang.code }}', '{{ lang.path }}')" class="lang-option">
+        <div onclick="switchLang({{ lang.code | jsonify }}, {{ lang.path | jsonify }})" class="lang-option">
           {{ lang.flag }} {{ lang.name }}
         </div>
         {%- endif -%}
@@ -30,7 +30,7 @@
 </div>
 
 <script>
-function switchLang(targetCode, targetPath) {
+window.switchLang = function(targetCode, targetPath) {
   var basePath = {{ site.baseurl | jsonify }} || '';
   if (basePath && basePath.charAt(basePath.length - 1) === '/') {
     basePath = basePath.slice(0, -1);
@@ -42,7 +42,7 @@ function switchLang(targetCode, targetPath) {
   // Remove current lang prefix
   var langs = [
     {%- for lang in site.languages -%}
-    {code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}},
+    {code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}}{%- unless forloop.last -%},{%- endunless -%}
     {%- endfor -%}
   ];
   
@@ -59,7 +59,7 @@ function switchLang(targetCode, targetPath) {
   }
   
   window.location.href = basePath + path;
-}
+};
 
 // Close menu when clicking outside
 document.addEventListener('click', function(e) {
