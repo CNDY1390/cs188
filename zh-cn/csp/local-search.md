@@ -3,6 +3,7 @@ title: 2.5 局部搜索
 parent: 2. CSPs
 nav_order: 5
 layout: page
+lang: zh-cn
 header-includes:
     \pagenumbering{gobble}
 ---

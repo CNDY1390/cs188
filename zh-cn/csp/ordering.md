@@ -3,6 +3,7 @@ title: 2.4 排序
 parent: 2. CSPs
 nav_order: 4
 layout: page
+lang: zh-cn
 header-includes:
     \pagenumbering{gobble}
 ---

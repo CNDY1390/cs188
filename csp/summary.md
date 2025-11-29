@@ -3,6 +3,7 @@ title: 2.6 Summary
 parent: 2. CSPs
 nav_order: 6
 layout: page
+lang: en
 header-includes:
     \pagenumbering{gobble}
 ---

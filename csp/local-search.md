@@ -3,6 +3,7 @@ title: 2.5 Local Search
 parent: 2. CSPs
 nav_order: 5
 layout: page
+lang: en
 header-includes:
     \pagenumbering{gobble}
 ---
