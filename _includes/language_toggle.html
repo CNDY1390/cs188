@@ -125,16 +125,22 @@
     }
   };
 
-  // Toggle language menu
+  // Toggle language menu - make it global and simple
   window.toggleLanguageMenu = function() {
+    console.log('toggleLanguageMenu called');
     var menu = document.getElementById('languageMenu');
+    console.log('Menu element:', menu);
     if (menu) {
       var isShowing = menu.classList.contains('show');
+      console.log('Menu is showing:', isShowing);
       if (isShowing) {
         menu.classList.remove('show');
       } else {
         menu.classList.add('show');
       }
+      console.log('Menu classes after toggle:', menu.className);
+    } else {
+      console.error('Menu element not found!');
     }
   };
 
@@ -229,7 +235,7 @@
       {%- assign current_lang_obj = site.languages | where: "code", "en" | first -%}
     {%- endif -%}
     
-    <button id="languageToggleBtn" class="language-btn" type="button" aria-label="选择语言 / Select Language">
+    <button id="languageToggleBtn" class="language-btn" type="button" aria-label="选择语言 / Select Language" onclick="window.toggleLanguageMenu(); return false;">
       <span class="language-flag">{{ current_lang_obj.flag }}</span>
       <span class="language-name">{{ current_lang_obj.name }}</span>
       <svg class="language-arrow" viewBox="0 0 24 24" width="16" height="16">
