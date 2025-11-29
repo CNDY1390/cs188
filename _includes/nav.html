@@ -34,22 +34,12 @@
   sorted_string_ordered_pages = sorted_string_ordered_pages | concat:
   group.items -%}   {%- endfor -%} {%- assign pages_list =
   sorted_number_ordered_pages | concat: sorted_string_ordered_pages -%}
-  {%- comment -%} Filter by language FIRST - detect from URL path {%- endcomment -%}
-  {%- assign current_lang = "en" -%}
-  {%- if page.url contains "/zh-cn/" -%}
-    {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page.url contains "/es/" -%}
-    {%- assign current_lang = "es" -%}
-  {%- endif -%}
+  {%- comment -%} Filter by language FIRST - detect from page.lang front matter {%- endcomment -%}
+  {%- assign current_lang = page.lang | default: "en" -%}
   {%- comment -%} Filter pages_list to only current language {%- endcomment -%}
   {%- assign filtered_pages_list = "" | split: "X" -%}
   {%- for node in pages_list -%}
-    {%- assign node_lang = "en" -%}
-    {%- if node.url contains "/zh-cn/" -%}
-      {%- assign node_lang = "zh-cn" -%}
-    {%- elsif node.url contains "/es/" -%}
-      {%- assign node_lang = "es" -%}
-    {%- endif -%}
+    {%- assign node_lang = node.lang | default: "en" -%}
     {%- if current_lang == node_lang -%}
       {%- assign filtered_pages_list = filtered_pages_list | push: node -%}
     {%- endif -%}
@@ -132,12 +122,7 @@ pages_list | where: "parent", page.title | where: "grand_parent", page.parent
 -%} {%- comment -%} Filter toc_list by language {%- endcomment -%}
 {%- assign toc_list = "" | split: "X" -%}
 {%- for item in toc_list_raw -%}
-  {%- assign item_lang = "en" -%}
-  {%- if item.url contains "/zh-cn/" -%}
-    {%- assign item_lang = "zh-cn" -%}
-  {%- elsif item.url contains "/es/" -%}
-    {%- assign item_lang = "es" -%}
-  {%- endif -%}
+  {%- assign item_lang = item.lang | default: "en" -%}
   {%- if current_lang == item_lang -%}
     {%- assign toc_list = toc_list | push: item -%}
   {%- endif -%}

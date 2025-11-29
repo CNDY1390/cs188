@@ -94,17 +94,23 @@ function convertPath(currentPath, fromLang, toLang) {
 
 // Switch to a specific language - make it global
 window.switchLanguage = function(langCode) {
+  console.log('switchLanguage called with:', langCode);
   var currentLang = getCurrentLanguage();
+  console.log('Current language:', currentLang);
   
   // Don't switch if already in target language
   if (currentLang === langCode) {
+    console.log('Already in target language');
     return;
   }
 
   var currentPath = window.location.pathname;
+  console.log('Current path:', currentPath);
   var newPath = convertPath(currentPath, currentLang, langCode);
+  console.log('New path:', newPath);
   
   if (newPath && newPath !== currentPath) {
+    console.log('Redirecting to:', newPath);
     window.location.href = newPath;
   } else {
     console.error('Language switch failed:', {
@@ -123,8 +129,9 @@ window.switchLanguage = function(langCode) {
     var selector = document.querySelector('.language-selector');
     var menu = document.getElementById('languageMenu');
     var btn = document.getElementById('languageToggleBtn');
-    // Don't close if clicking the button or menu items
-    if (selector && menu && !selector.contains(event.target) && event.target !== btn) {
+    var option = event.target.closest('.language-option');
+    // Don't close if clicking the button, menu items, or language options
+    if (selector && menu && !selector.contains(event.target) && event.target !== btn && !option) {
       menu.classList.remove('show');
     }
   }, true); // Use capture phase to handle before other handlers
@@ -160,7 +167,7 @@ window.switchLanguage = function(langCode) {
         <a href="#" 
            data-lang="{{ lang.code }}"
            class="language-option"
-           onclick="(function(e){e.preventDefault();e.stopPropagation();var code='{{ lang.code }}';if(window.switchLanguage){window.switchLanguage(code);}return false;})(event);return false;">
+           onclick="console.log('Language option clicked:', '{{ lang.code }}');window.switchLanguage('{{ lang.code }}');return false;">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>

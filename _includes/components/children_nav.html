@@ -6,25 +6,15 @@ Override the default Just the Docs children_nav.html to filter by language
 {%- if page.has_children == false or page.has_toc == false -%}
   {%- assign nav_children = "" | split: "" -%}
 {%- else -%}
-  {%- comment -%} Detect current language from URL {%- endcomment -%}
-  {%- assign current_lang = "en" -%}
-  {%- if page.url contains "/zh-cn/" -%}
-    {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page.url contains "/es/" -%}
-    {%- assign current_lang = "es" -%}
-  {%- endif -%}
+  {%- comment -%} Detect current language from page.lang front matter {%- endcomment -%}
+  {%- assign current_lang = page.lang | default: "en" -%}
 
   {%- comment -%} Get all pages and filter by language FIRST, then by parent {%- endcomment -%}
   {%- assign all_pages = site[page.collection] | default: site.html_pages | where_exp: "item", "item.title != nil" -%}
   {%- comment -%} Filter pages by language first {%- endcomment -%}
   {%- assign filtered_pages = "" | split: "" -%}
   {%- for item in all_pages -%}
-    {%- assign item_lang = "en" -%}
-    {%- if item.url contains "/zh-cn/" -%}
-      {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item.url contains "/es/" -%}
-      {%- assign item_lang = "es" -%}
-    {%- endif -%}
+    {%- assign item_lang = item.lang | default: "en" -%}
     {%- if current_lang == item_lang -%}
       {%- assign filtered_pages = filtered_pages | push: item -%}
     {%- endif -%}
