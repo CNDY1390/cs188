@@ -4,11 +4,36 @@ layout: default
 
 {% include language_toggle.html %}
 
-{% capture content %} {{ content }} {% endcapture %}
+{%- comment -%} Get children_nav content and render it as markdown {%- endcomment -%}
+{%- capture children_content -%}
+{%- include components/children_nav.html -%}
+{%- endcapture -%}
+{%- if children_content != "" -%}
+  {%- assign children_markdown = children_content | markdownify -%}
+{%- else -%}
+  {%- assign children_markdown = "" -%}
+{%- endif -%}
+
+{%- comment -%} Remove unrendered children_nav markdown from content if present {%- endcomment -%}
+{%- assign content_clean = content -%}
+{%- if content contains "## TABLE OF CONTENTS" -%}
+  {%- assign content_parts = content | split: "* * *" -%}
+  {%- if content_parts.size > 1 -%}
+    {%- assign content_clean = content_parts[0] -%}
+    {%- for part in content_parts offset:1 -%}
+      {%- unless part contains "TABLE OF CONTENTS" or part contains "[{{" -%}
+        {%- assign content_clean = content_clean | append: "* * *" | append: part -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endif -%}
+
+{% capture content %} {{ content_clean }} {% endcapture %}
 <div class="page">
   <nav class="content-nav nav-list js-toc" aria-label="In-page navigation">
-    {% include toc.html html=content sanitize=true item_class="nav-list-item"
+    {%- assign full_content = content | append: children_markdown -%}
+    {% include toc.html html=full_content sanitize=true item_class="nav-list-item"
     anchor_class="nav-list-link" h_min=1 h_max=3 %}
   </nav>
-  <div class="content">{{ content }}</div>
+  <div class="content">{{ content }}{{ children_markdown }}</div>
 </div>
