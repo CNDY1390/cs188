@@ -13,14 +13,14 @@
       {%- assign current_lang_obj = site.languages | where: "code", "en" | first -%}
     {%- endif -%}
     
-    <button onclick="document.getElementById('lang-menu').style.display = document.getElementById('lang-menu').style.display === 'block' ? 'none' : 'block'" class="lang-btn">
+    <button onclick="var m=document.getElementById('lang-menu');m.style.display=m.style.display==='block'?'none':'block'" class="lang-btn">
       {{ current_lang_obj.flag }} {{ current_lang_obj.name }}
     </button>
     
     <div id="lang-menu" class="lang-menu" style="display: none;">
       {%- for lang in site.languages -%}
         {%- if lang.code != current_lang -%}
-        <div onclick="window.switchLang({{ lang.code | jsonify }}, {{ lang.path | jsonify }})" class="lang-option">
+        <div onclick="switchLang('{{ lang.code }}','{{ lang.path }}')" class="lang-option">
           {{ lang.flag }} {{ lang.name }}
         </div>
         {%- endif -%}
@@ -30,8 +30,8 @@
 </div>
 
 <script>
-window.switchLang = function(targetCode, targetPath) {
-  var basePath = {{ site.baseurl | jsonify }} || '';
+function switchLang(targetCode, targetPath) {
+  var basePath = '{{ site.baseurl }}' || '';
   if (basePath && basePath.charAt(basePath.length - 1) === '/') {
     basePath = basePath.slice(0, -1);
   }
@@ -39,14 +39,16 @@ window.switchLang = function(targetCode, targetPath) {
   var path = window.location.pathname.replace(basePath, '');
   if (path.charAt(0) !== '/') path = '/' + path;
   
-  var langs = [];
-  {%- for lang in site.languages -%}
-  langs.push({code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}});
-  {%- endfor -%}
+  var langPaths = {
+    {%- for lang in site.languages -%}
+    '{{ lang.code }}': '{{ lang.path }}'{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  };
   
-  for (var i = 0; i < langs.length; i++) {
-    if (langs[i].path && path.indexOf('/' + langs[i].path + '/') === 0) {
-      path = path.substring(langs[i].path.length + 1);
+  for (var code in langPaths) {
+    var p = langPaths[code];
+    if (p && path.indexOf('/' + p + '/') === 0) {
+      path = path.substring(p.length + 1);
       break;
     }
   }
@@ -56,7 +58,7 @@ window.switchLang = function(targetCode, targetPath) {
   }
   
   window.location.href = basePath + path;
-};
+}
 
 document.addEventListener('click', function(e) {
   var menu = document.getElementById('lang-menu');
