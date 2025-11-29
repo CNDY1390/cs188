@@ -11,12 +11,22 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
   >
   {%- if include.node.has_children and include.depth <= site.max_nav_depth -%}
   {%- comment -%} Get children - filter by language FIRST, then by parent {%- endcomment -%}
-  {%- assign current_lang = page.lang | default: "en" -%}
+  {%- assign current_lang = "en" -%}
+  {%- if page.url contains "/zh-cn/" -%}
+    {%- assign current_lang = "zh-cn" -%}
+  {%- elsif page.url contains "/es/" -%}
+    {%- assign current_lang = "es" -%}
+  {%- endif -%}
   {%- comment -%} Filter all pages by language first {%- endcomment -%}
   {%- assign all_pages = site.html_pages | where_exp: "item", "item.title != nil" -%}
   {%- assign filtered_pages = "" | split: "X" -%}
   {%- for item in all_pages -%}
-    {%- assign item_lang = item.lang | default: "en" -%}
+    {%- assign item_lang = "en" -%}
+    {%- if item.url contains "/zh-cn/" -%}
+      {%- assign item_lang = "zh-cn" -%}
+    {%- elsif item.url contains "/es/" -%}
+      {%- assign item_lang = "es" -%}
+    {%- endif -%}
     {%- if current_lang == item_lang -%}
       {%- assign filtered_pages = filtered_pages | push: item -%}
     {%- endif -%}
