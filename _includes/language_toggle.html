@@ -79,17 +79,13 @@ function convertPath(currentPath, fromLang, toLang) {
     relativePath = '/' + toLangObj.path + relativePath;
   }
 
-  // Handle index pages
+  // Handle root path
   if (relativePath === '/' || relativePath === '') {
     if (toLangObj.path) {
       relativePath = '/' + toLangObj.path + '/';
     } else {
       relativePath = '/';
     }
-  } else if (relativePath.charAt(relativePath.length - 1) === '/') {
-    relativePath += 'index.html';
-  } else if (relativePath.indexOf('.html') === -1 && relativePath !== '/') {
-    relativePath += '.html';
   }
 
   var newPath = basePath + relativePath;
@@ -98,22 +94,25 @@ function convertPath(currentPath, fromLang, toLang) {
 
 // Switch to a specific language - make it global
 window.switchLanguage = function(langCode) {
-  try {
-    var currentLang = getCurrentLanguage();
-    
-    // Don't switch if already in target language
-    if (currentLang === langCode) {
-      return;
-    }
+  var currentLang = getCurrentLanguage();
+  
+  // Don't switch if already in target language
+  if (currentLang === langCode) {
+    return;
+  }
 
-    var currentPath = window.location.pathname;
-    var newPath = convertPath(currentPath, currentLang, langCode);
-    
-    if (newPath && newPath !== currentPath) {
-      window.location.href = newPath;
-    }
-  } catch (e) {
-    // Silent error
+  var currentPath = window.location.pathname;
+  var newPath = convertPath(currentPath, currentLang, langCode);
+  
+  if (newPath && newPath !== currentPath) {
+    window.location.href = newPath;
+  } else {
+    console.error('Language switch failed:', {
+      currentPath: currentPath,
+      newPath: newPath,
+      currentLang: currentLang,
+      targetLang: langCode
+    });
   }
 };
 
