@@ -88,3 +88,7 @@ exclude:
   - package.json
   - vendor/bundle/
   - yarn.lock
+
+# Google Analytics
+ga_tracking: G-Y31FWBVQ5N
+ga_tracking_anonymize_ip: true
