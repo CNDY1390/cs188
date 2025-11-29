@@ -1,5 +1,6 @@
 <!-- Multi-Language Toggle -->
 <script type="text/javascript">
+(function() {
 // Language configuration and functions defined globally
 var languages = [];
 {%- if site.languages and site.languages.size > 0 -%}
@@ -94,47 +95,52 @@ function convertPath(currentPath, fromLang, toLang) {
 
 // Switch to a specific language - make it global
 window.switchLanguage = function(langCode) {
-  console.log('switchLanguage called with:', langCode);
-  var currentLang = getCurrentLanguage();
-  console.log('Current language:', currentLang);
-  
-  // Don't switch if already in target language
-  if (currentLang === langCode) {
-    console.log('Already in target language');
-    return;
-  }
+  try {
+    console.log('switchLanguage called with:', langCode);
+    var currentLang = getCurrentLanguage();
+    console.log('Current language:', currentLang);
+    
+    // Don't switch if already in target language
+    if (currentLang === langCode) {
+      console.log('Already in target language');
+      return;
+    }
 
-  var currentPath = window.location.pathname;
-  console.log('Current path:', currentPath);
-  var newPath = convertPath(currentPath, currentLang, langCode);
-  console.log('New path:', newPath);
-  
-  if (newPath && newPath !== currentPath) {
-    console.log('Redirecting to:', newPath);
-    window.location.href = newPath;
-  } else {
-    console.error('Language switch failed:', {
-      currentPath: currentPath,
-      newPath: newPath,
-      currentLang: currentLang,
-      targetLang: langCode
-    });
+    var currentPath = window.location.pathname;
+    console.log('Current path:', currentPath);
+    var newPath = convertPath(currentPath, currentLang, langCode);
+    console.log('New path:', newPath);
+    
+    if (newPath && newPath !== currentPath) {
+      console.log('Redirecting to:', newPath);
+      window.location.href = newPath;
+    } else {
+      console.error('Language switch failed:', {
+        currentPath: currentPath,
+        newPath: newPath,
+        currentLang: currentLang,
+        targetLang: langCode
+      });
+    }
+  } catch (e) {
+    console.error('Error in switchLanguage:', e);
   }
 };
 
-// Only IIFE needed for click-outside behavior
-(function() {
-  // Close menu when clicking outside
-  document.addEventListener('click', function(event) {
-    var selector = document.querySelector('.language-selector');
-    var menu = document.getElementById('languageMenu');
-    var btn = document.getElementById('languageToggleBtn');
-    var option = event.target.closest('.language-option');
-    // Don't close if clicking the button, menu items, or language options
-    if (selector && menu && !selector.contains(event.target) && event.target !== btn && !option) {
-      menu.classList.remove('show');
-    }
-  }, true); // Use capture phase to handle before other handlers
+// Verify function is defined
+console.log('switchLanguage defined:', typeof window.switchLanguage);
+
+// Close menu when clicking outside
+document.addEventListener('click', function(event) {
+  var selector = document.querySelector('.language-selector');
+  var menu = document.getElementById('languageMenu');
+  var btn = document.getElementById('languageToggleBtn');
+  var option = event.target.closest('.language-option');
+  // Don't close if clicking the button, menu items, or language options
+  if (selector && menu && !selector.contains(event.target) && event.target !== btn && !option) {
+    menu.classList.remove('show');
+  }
+}, true); // Use capture phase to handle before other handlers
 })();
 </script>
 
@@ -167,7 +173,7 @@ window.switchLanguage = function(langCode) {
         <a href="#" 
            data-lang="{{ lang.code }}"
            class="language-option"
-           onclick="console.log('Language option clicked:', '{{ lang.code }}');window.switchLanguage('{{ lang.code }}');return false;">
+           onclick="if(typeof window.switchLanguage==='function'){window.switchLanguage('{{ lang.code }}');}else{console.error('switchLanguage not defined');}return false;">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>
