@@ -2,6 +2,7 @@
 title: 6. Bayes Nets
 nav_order: 6
 has_children: true
+lang: zh-cn
 header-includes: \pagenumbering{gobble}
 ---
 

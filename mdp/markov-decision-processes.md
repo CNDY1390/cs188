@@ -3,6 +3,7 @@ title: 4.1 Markov Decision Processes
 parent: 4. MDPs
 nav_order: 1
 layout: page
+lang: en
 header-includes:
     \pagenumbering{gobble}
 ---

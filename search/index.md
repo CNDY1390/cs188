@@ -2,6 +2,7 @@
 title: 1. Search
 nav_order: 1
 has_children: true
+lang: en
 header-includes:
     \pagenumbering{gobble}
 ---

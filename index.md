@@ -2,6 +2,7 @@
 title: Introduction
 nav_order: 0
 layout: page
+lang: en
 header-includes:
     \pagenumbering{gobble}
 ---
