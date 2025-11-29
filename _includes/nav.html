@@ -79,8 +79,19 @@
     where_exp:"item", "item.grand_parent == nil" | reverse -%} {%- else -%} {%-
     assign children_list = pages_list | where: "parent", node.title |
     where_exp:"item", "item.grand_parent == nil" -%} {%- endif -%}
-    {%- comment -%} Children already filtered by language in pages_list {%- endcomment -%}
-    {%- assign filtered_children = children_list -%}
+    {%- comment -%} Children already filtered by language in pages_list, but double-check {%- endcomment -%}
+    {%- assign filtered_children = "" | split: "X" -%}
+    {%- for child in children_list -%}
+      {%- assign child_lang = "en" -%}
+      {%- if child.url contains "/zh-cn/" -%}
+        {%- assign child_lang = "zh-cn" -%}
+      {%- elsif child.url contains "/es/" -%}
+        {%- assign child_lang = "es" -%}
+      {%- endif -%}
+      {%- if current_lang == child_lang -%}
+        {%- assign filtered_children = filtered_children | push: child -%}
+      {%- endif -%}
+    {%- endfor -%}
     <ul class="nav-list">
       {%- for child in filtered_children -%} {%- include nav_list.html node=child
       depth=1 -%} {%- comment -%} Hack to display anchors in the navbar for

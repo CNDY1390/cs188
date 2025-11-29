@@ -58,6 +58,11 @@ aux_links:
 # Each language directory gets nav_exclude and lang set automatically
 defaults:
   - scope:
+      path: ""
+      type: "pages"
+    values:
+      lang: en
+  - scope:
       path: "zh-cn"
     values:
       nav_exclude: true
