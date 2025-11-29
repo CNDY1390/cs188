@@ -143,12 +143,26 @@
     // Button click handler - use direct event binding
     var btn = document.getElementById('languageToggleBtn');
     if (btn) {
+      // Remove any existing handlers
+      btn.onclick = null;
+      // Add click handler - use capture phase to ensure it fires first
       btn.addEventListener('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        window.toggleLanguageMenu();
+        console.log('Language button clicked');
+        var menu = document.getElementById('languageMenu');
+        if (menu) {
+          var isShowing = menu.classList.contains('show');
+          if (isShowing) {
+            menu.classList.remove('show');
+          } else {
+            menu.classList.add('show');
+          }
+        }
         return false;
-      });
+      }, true); // Capture phase - fires before other handlers
+    } else {
+      console.error('Language toggle button not found!');
     }
 
     // Language option click handlers - use event delegation
@@ -174,18 +188,29 @@
     document.addEventListener('click', function(event) {
       var selector = document.querySelector('.language-selector');
       var menu = document.getElementById('languageMenu');
-      if (selector && menu && !selector.contains(event.target)) {
+      var btn = document.getElementById('languageToggleBtn');
+      // Don't close if clicking the button or menu items
+      if (selector && menu && !selector.contains(event.target) && event.target !== btn) {
         menu.classList.remove('show');
       }
-    });
+    }, true); // Use capture phase to handle before other handlers
   }
 
-  // Wait for DOM
+  // Wait for DOM - try multiple methods
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initLanguageToggle);
   } else {
     initLanguageToggle();
   }
+  
+  // Also try after a short delay as fallback
+  setTimeout(function() {
+    var btn = document.getElementById('languageToggleBtn');
+    if (btn && !btn.onclick) {
+      console.log('Retrying language toggle init');
+      initLanguageToggle();
+    }
+  }, 100);
 })();
 </script>
 
@@ -232,7 +257,7 @@
   position: fixed;
   top: 80px;
   right: 20px;
-  z-index: 999;
+  z-index: 9999 !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
