@@ -31,6 +31,21 @@ remote_theme: pmarsceill/just-the-docs
 color_scheme: wider
 
 # Multi-language support
+# Define all supported languages here
+languages:
+  - code: "en"
+    name: "English"
+    flag: "🇺🇸"
+    path: ""  # Root path for English
+  - code: "zh-cn"
+    name: "简体中文"
+    flag: "🇨🇳"
+    path: "zh-cn"
+  - code: "es"
+    name: "Español"
+    flag: "🇪🇸"
+    path: "es"
+
 aux_links:
   "CS 188":
     - "https://inst.eecs.berkeley.edu/~cs188/"
@@ -39,13 +54,19 @@ aux_links:
   "GitHub":
     - "https://github.com/CNDY1390/cs188"
 
-# Automatically exclude Chinese pages from English navigation
+# Automatically exclude non-English pages from English navigation
+# Each language directory gets nav_exclude and lang set automatically
 defaults:
   - scope:
       path: "zh-cn"
     values:
       nav_exclude: true
       lang: zh-cn
+  - scope:
+      path: "es"
+    values:
+      nav_exclude: true
+      lang: es
 
 # Exclude from processing.
 # The following items will not be processed, by default.
