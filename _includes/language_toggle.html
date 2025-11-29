@@ -123,21 +123,29 @@ window.toggleLanguageMenu = function() {
     return newPath;
   }
 
-  // Switch to a specific language
+  // Switch to a specific language - make it global
   window.switchLanguage = function(langCode) {
     try {
+      console.log('switchLanguage called with:', langCode);
       var currentLang = getCurrentLanguage();
+      console.log('Current language:', currentLang);
       
       // Don't switch if already in target language
       if (currentLang === langCode) {
+        console.log('Already in target language');
         return;
       }
 
       var currentPath = window.location.pathname;
+      console.log('Current path:', currentPath);
       var newPath = convertPath(currentPath, currentLang, langCode);
+      console.log('New path:', newPath);
       
       if (newPath && newPath !== currentPath) {
+        console.log('Redirecting to:', newPath);
         window.location.href = newPath;
+      } else {
+        console.error('Invalid path conversion');
       }
     } catch (e) {
       console.error('Error switching language:', e);
@@ -250,7 +258,8 @@ window.toggleLanguageMenu = function() {
         {%- if lang.code != current_lang -%}
         <a href="#" 
            data-lang="{{ lang.code }}"
-           class="language-option">
+           class="language-option"
+           onclick="(function(e){e.preventDefault();e.stopPropagation();var code='{{ lang.code }}';if(window.switchLanguage){window.switchLanguage(code);}else{console.error('switchLanguage not defined');}return false;})(event);return false;">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>
