@@ -31,8 +31,7 @@
 
 <script>
 window.switchLang = function(targetCode, targetPath) {
-  var basePath = {{ site.baseurl | jsonify }};
-  if (!basePath) basePath = '';
+  var basePath = {{ site.baseurl | jsonify }} || '';
   if (basePath && basePath.charAt(basePath.length - 1) === '/') {
     basePath = basePath.slice(0, -1);
   }
@@ -40,11 +39,10 @@ window.switchLang = function(targetCode, targetPath) {
   var path = window.location.pathname.replace(basePath, '');
   if (path.charAt(0) !== '/') path = '/' + path;
   
-  var langs = [
-    {%- for lang in site.languages -%}
-    {code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}}{%- unless forloop.last -%},{%- endunless -%}
-    {%- endfor -%}
-  ];
+  var langs = [];
+  {%- for lang in site.languages -%}
+  langs.push({code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}});
+  {%- endfor -%}
   
   for (var i = 0; i < langs.length; i++) {
     if (langs[i].path && path.indexOf('/' + langs[i].path + '/') === 0) {
