@@ -1,232 +1,134 @@
 <!-- Multi-Language Toggle -->
 <script type="text/javascript">
-// Define toggleLanguageMenu FIRST, before any other code
-window.toggleLanguageMenu = function() {
-  console.log('toggleLanguageMenu called');
-  var menu = document.getElementById('languageMenu');
-  console.log('Menu element:', menu);
-  if (menu) {
-    var isShowing = menu.classList.contains('show');
-    console.log('Menu is showing:', isShowing);
-    if (isShowing) {
-      menu.classList.remove('show');
-    } else {
-      menu.classList.add('show');
+// Language configuration and functions defined globally
+var languages = [];
+{%- if site.languages and site.languages.size > 0 -%}
+  {%- for lang in site.languages -%}
+  languages.push({
+    code: "{{ lang.code }}",
+    name: "{{ lang.name }}",
+    flag: "{{ lang.flag }}",
+    path: "{{ lang.path }}"
+  });
+  {%- endfor -%}
+{%- endif -%}
+
+var basePath = '{{ site.baseurl }}' || '';
+// Normalize basePath
+if (basePath && basePath.charAt(basePath.length - 1) === '/') {
+  basePath = basePath.slice(0, -1);
+}
+
+// Get current language from page or URL
+function getCurrentLanguage() {
+  var currentPath = window.location.pathname;
+  var relativePath = currentPath.replace(basePath, '');
+  if (relativePath.charAt(0) !== '/') {
+    relativePath = '/' + relativePath;
+  }
+  
+  // Check if we're in a language-specific path
+  for (var i = 0; i < languages.length; i++) {
+    var lang = languages[i];
+    if (lang.path && relativePath.indexOf('/' + lang.path + '/') === 0) {
+      return lang.code;
     }
-    console.log('Menu classes after toggle:', menu.className);
-  } else {
-    console.error('Menu element not found!');
+  }
+  // Default to English
+  return 'en';
+}
+
+// Convert path between languages
+function convertPath(currentPath, fromLang, toLang) {
+  var relativePath = currentPath.replace(basePath, '');
+  if (relativePath.charAt(0) !== '/') {
+    relativePath = '/' + relativePath;
+  }
+  
+  // Find language paths
+  var fromLangObj = null;
+  var toLangObj = null;
+  for (var i = 0; i < languages.length; i++) {
+    if (languages[i].code === fromLang) {
+      fromLangObj = languages[i];
+    }
+    if (languages[i].code === toLang) {
+      toLangObj = languages[i];
+    }
+  }
+  
+  if (!fromLangObj || !toLangObj) {
+    return currentPath;
+  }
+
+  // Remove current language prefix
+  if (fromLangObj.path) {
+    var langPrefix = '/' + fromLangObj.path;
+    if (relativePath.indexOf(langPrefix) === 0) {
+      relativePath = relativePath.substring(langPrefix.length);
+    }
+  }
+  
+  // Ensure relativePath starts with /
+  if (relativePath.charAt(0) !== '/') {
+    relativePath = '/' + relativePath;
+  }
+  
+  // Add target language prefix
+  if (toLangObj.path) {
+    relativePath = '/' + toLangObj.path + relativePath;
+  }
+
+  // Handle index pages
+  if (relativePath === '/' || relativePath === '') {
+    if (toLangObj.path) {
+      relativePath = '/' + toLangObj.path + '/';
+    } else {
+      relativePath = '/';
+    }
+  } else if (relativePath.charAt(relativePath.length - 1) === '/') {
+    relativePath += 'index.html';
+  } else if (relativePath.indexOf('.html') === -1 && relativePath !== '/') {
+    relativePath += '.html';
+  }
+
+  var newPath = basePath + relativePath;
+  return newPath;
+}
+
+// Switch to a specific language - make it global
+window.switchLanguage = function(langCode) {
+  try {
+    var currentLang = getCurrentLanguage();
+    
+    // Don't switch if already in target language
+    if (currentLang === langCode) {
+      return;
+    }
+
+    var currentPath = window.location.pathname;
+    var newPath = convertPath(currentPath, currentLang, langCode);
+    
+    if (newPath && newPath !== currentPath) {
+      window.location.href = newPath;
+    }
+  } catch (e) {
+    // Silent error
   }
 };
 
-// Language configuration and functions
+// Only IIFE needed for click-outside behavior
 (function() {
-  // Language configuration from Jekyll
-  var languages = [];
-  {%- if site.languages and site.languages.size > 0 -%}
-    {%- for lang in site.languages -%}
-    languages.push({
-      code: "{{ lang.code }}",
-      name: "{{ lang.name }}",
-      flag: "{{ lang.flag }}",
-      path: "{{ lang.path }}"
-    });
-    {%- endfor -%}
-  {%- else -%}
-    // Fallback if languages not configured
-    languages = [
-      { code: "en", name: "English", flag: "🇺🇸", path: "" },
-      { code: "zh-cn", name: "简体中文", flag: "🇨🇳", path: "zh-cn" }
-    ];
-  {%- endif -%}
-
-  var basePath = '{{ site.baseurl }}' || '';
-  // Normalize basePath
-  if (basePath && basePath.charAt(basePath.length - 1) === '/') {
-    basePath = basePath.slice(0, -1);
-  }
-
-  // Get current language from page or URL
-  function getCurrentLanguage() {
-    var currentPath = window.location.pathname;
-    var relativePath = currentPath.replace(basePath, '');
-    if (relativePath.charAt(0) !== '/') {
-      relativePath = '/' + relativePath;
-    }
-    
-    // Check if we're in a language-specific path
-    for (var i = 0; i < languages.length; i++) {
-      var lang = languages[i];
-      if (lang.path && relativePath.indexOf('/' + lang.path + '/') === 0) {
-        return lang.code;
-      }
-    }
-    // Default to English
-    return 'en';
-  }
-
-  // Convert path between languages
-  function convertPath(currentPath, fromLang, toLang) {
-    var relativePath = currentPath.replace(basePath, '');
-    if (relativePath.charAt(0) !== '/') {
-      relativePath = '/' + relativePath;
-    }
-    
-    // Find language paths
-    var fromLangObj = null;
-    var toLangObj = null;
-    for (var i = 0; i < languages.length; i++) {
-      if (languages[i].code === fromLang) {
-        fromLangObj = languages[i];
-      }
-      if (languages[i].code === toLang) {
-        toLangObj = languages[i];
-      }
-    }
-    
-    if (!fromLangObj || !toLangObj) {
-      return currentPath; // Fallback
-    }
-
-    // Remove current language prefix
-    if (fromLangObj.path) {
-      var langPrefix = '/' + fromLangObj.path;
-      if (relativePath.indexOf(langPrefix) === 0) {
-        relativePath = relativePath.substring(langPrefix.length);
-      }
-    }
-    
-    // Ensure relativePath starts with /
-    if (relativePath.charAt(0) !== '/') {
-      relativePath = '/' + relativePath;
-    }
-    
-    // Add target language prefix
-    if (toLangObj.path) {
-      relativePath = '/' + toLangObj.path + relativePath;
-    }
-
-    // Handle index pages
-    if (relativePath === '/' || relativePath === '') {
-      if (toLangObj.path) {
-        relativePath = '/' + toLangObj.path + '/';
-      } else {
-        relativePath = '/';
-      }
-    } else if (relativePath.charAt(relativePath.length - 1) === '/') {
-      relativePath += 'index.html';
-    } else if (relativePath.indexOf('.html') === -1 && relativePath !== '/') {
-      relativePath += '.html';
-    }
-
-    var newPath = basePath + relativePath;
-    return newPath;
-  }
-
-  // Switch to a specific language - make it global
-  window.switchLanguage = function(langCode) {
-    try {
-      console.log('switchLanguage called with:', langCode);
-      var currentLang = getCurrentLanguage();
-      console.log('Current language:', currentLang);
-      
-      // Don't switch if already in target language
-      if (currentLang === langCode) {
-        console.log('Already in target language');
-        return;
-      }
-
-      var currentPath = window.location.pathname;
-      console.log('Current path:', currentPath);
-      var newPath = convertPath(currentPath, currentLang, langCode);
-      console.log('New path:', newPath);
-      
-      if (newPath && newPath !== currentPath) {
-        console.log('Redirecting to:', newPath);
-        window.location.href = newPath;
-      } else {
-        console.error('Invalid path conversion');
-      }
-    } catch (e) {
-      console.error('Error switching language:', e);
-    }
-  };
-
-  // toggleLanguageMenu is already defined at the top of the script
-
-  // Initialize when DOM is ready
-  function initLanguageToggle() {
-    // Button click handler - use direct event binding
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    var selector = document.querySelector('.language-selector');
+    var menu = document.getElementById('languageMenu');
     var btn = document.getElementById('languageToggleBtn');
-    if (btn) {
-      // Remove any existing handlers
-      btn.onclick = null;
-      // Add click handler - use capture phase to ensure it fires first
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        console.log('Language button clicked');
-        var menu = document.getElementById('languageMenu');
-        if (menu) {
-          var isShowing = menu.classList.contains('show');
-          if (isShowing) {
-            menu.classList.remove('show');
-          } else {
-            menu.classList.add('show');
-          }
-        }
-        return false;
-      }, true); // Capture phase - fires before other handlers
-    } else {
-      console.error('Language toggle button not found!');
+    // Don't close if clicking the button or menu items
+    if (selector && menu && !selector.contains(event.target) && event.target !== btn) {
+      menu.classList.remove('show');
     }
-
-    // Language option click handlers - use event delegation
-    document.addEventListener('click', function(e) {
-      var option = e.target.closest('.language-option');
-      if (option) {
-        e.preventDefault();
-        e.stopPropagation();
-        var langCode = option.getAttribute('data-lang');
-        if (langCode && window.switchLanguage) {
-          window.switchLanguage(langCode);
-        }
-        // Close menu after selection
-        var menu = document.getElementById('languageMenu');
-        if (menu) {
-          menu.classList.remove('show');
-        }
-        return false;
-      }
-    });
-
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-      var selector = document.querySelector('.language-selector');
-      var menu = document.getElementById('languageMenu');
-      var btn = document.getElementById('languageToggleBtn');
-      // Don't close if clicking the button or menu items
-      if (selector && menu && !selector.contains(event.target) && event.target !== btn) {
-        menu.classList.remove('show');
-      }
-    }, true); // Use capture phase to handle before other handlers
-  }
-
-  // Wait for DOM - try multiple methods
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLanguageToggle);
-  } else {
-    initLanguageToggle();
-  }
-  
-  // Also try after a short delay as fallback
-  setTimeout(function() {
-    var btn = document.getElementById('languageToggleBtn');
-    if (btn && !btn.onclick) {
-      console.log('Retrying language toggle init');
-      initLanguageToggle();
-    }
-  }, 100);
+  }, true); // Use capture phase to handle before other handlers
 })();
 </script>
 
@@ -259,7 +161,7 @@ window.toggleLanguageMenu = function() {
         <a href="#" 
            data-lang="{{ lang.code }}"
            class="language-option"
-           onclick="(function(e){e.preventDefault();e.stopPropagation();var code='{{ lang.code }}';if(window.switchLanguage){window.switchLanguage(code);}else{console.error('switchLanguage not defined');}return false;})(event);return false;">
+           onclick="(function(e){e.preventDefault();e.stopPropagation();var code='{{ lang.code }}';if(window.switchLanguage){window.switchLanguage(code);}return false;})(event);return false;">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>
