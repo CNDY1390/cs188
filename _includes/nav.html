@@ -126,6 +126,18 @@ child in children_list -%} {%- if child.has_children -%} {%- if page.url ==
 child.url or page.parent == child.title and page.grand_parent == child.parent
 -%} {%- assign second_level_url = child.url | relative_url -%} {%- endif -%} {%-
 endif -%} {%- endfor -%} {%- endif -%} {%- endif -%} {%- endfor -%} {% if
-page.has_children == true and page.has_toc != false %} {%- assign toc_list =
+page.has_children == true and page.has_toc != false %} {%- assign toc_list_raw =
 pages_list | where: "parent", page.title | where: "grand_parent", page.parent
--%} {%- endif -%} {%- endif -%}
+-%} {%- comment -%} Filter toc_list by language {%- endcomment -%}
+{%- assign toc_list = "" | split: "X" -%}
+{%- for item in toc_list_raw -%}
+  {%- assign item_lang = "en" -%}
+  {%- if item.url contains "/zh-cn/" -%}
+    {%- assign item_lang = "zh-cn" -%}
+  {%- elsif item.url contains "/es/" -%}
+    {%- assign item_lang = "es" -%}
+  {%- endif -%}
+  {%- if current_lang == item_lang -%}
+    {%- assign toc_list = toc_list | push: item -%}
+  {%- endif -%}
+{%- endfor -%} {%- endif -%} {%- endif -%}
