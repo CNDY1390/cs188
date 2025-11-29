@@ -1,0 +1,56 @@
+{%- comment -%} 
+Custom children_nav.html with language filtering
+Override the default Just the Docs children_nav.html to filter by language
+{%- endcomment -%}
+
+{%- if page.has_children == false or page.has_toc == false -%}
+  {%- assign nav_children = "" | split: "" -%}
+{%- else -%}
+  {%- comment -%} Detect current language from URL {%- endcomment -%}
+  {%- assign current_lang = "en" -%}
+  {%- if page.url contains "/zh-cn/" -%}
+    {%- assign current_lang = "zh-cn" -%}
+  {%- elsif page.url contains "/es/" -%}
+    {%- assign current_lang = "es" -%}
+  {%- endif -%}
+
+  {%- comment -%} Get all pages and filter by language FIRST, then by parent {%- endcomment -%}
+  {%- assign all_pages = site[page.collection] | default: site.html_pages | where_exp: "item", "item.title != nil" -%}
+  {%- comment -%} Filter pages by language first {%- endcomment -%}
+  {%- assign filtered_pages = "" | split: "" -%}
+  {%- for item in all_pages -%}
+    {%- assign item_lang = "en" -%}
+    {%- if item.url contains "/zh-cn/" -%}
+      {%- assign item_lang = "zh-cn" -%}
+    {%- elsif item.url contains "/es/" -%}
+      {%- assign item_lang = "es" -%}
+    {%- endif -%}
+    {%- if current_lang == item_lang -%}
+      {%- assign filtered_pages = filtered_pages | push: item -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- comment -%} Group filtered pages by parent {%- endcomment -%}
+  {%- assign nav_parenthood = filtered_pages | group_by: "parent" -%}
+  {%- assign nav_parent_group = nav_parenthood | where_exp: "item", "item.name == page.title" | first -%}
+  {%- if nav_parent_group -%}
+    {%- assign nav_children = nav_parent_group.items -%}
+  {%- else -%}
+    {%- assign nav_children = "" | split: "" -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if nav_children.size >= 1 -%}
+  {%- if page.child_nav_order == 'desc' or page.child_nav_order == 'reversed' -%}
+    {%- assign nav_children = nav_children | reverse -%}
+  {%- endif -%}
+
+* * *
+
+{% include toc_heading_custom.html %}
+
+{% for nav_child in nav_children %}*   [{{ nav_child.title }}]({{ nav_child.url | relative_url }}){% if nav_child.summary %} - {{ nav_child.summary }}{% endif %}
+{% endfor %}
+
+{%- endif -%}
+
