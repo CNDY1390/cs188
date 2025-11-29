@@ -72,7 +72,18 @@
     <a
       href="{{ node.url | relative_url }}"
       class="nav-list-link{% if page.url == node.url %} active{% endif %}"
-      >{{ node.title }}</a
+      >{%- comment -%} Display Chinese title for Chinese pages {%- endcomment -%}
+      {%- if current_lang == "zh-cn" -%}
+        {%- if node.title == "2. CSPs" -%}2. 约束满足问题
+        {%- elsif node.title == "4. MDPs" -%}4. 马尔可夫决策过程
+        {%- elsif node.title == "5. RL" -%}5. 强化学习
+        {%- elsif node.title == "6. Bayes Nets" -%}6. 贝叶斯网络
+        {%- elsif node.title == "8. HMMs" -%}8. 隐马尔可夫模型
+        {%- elsif node.title == "9. ML" -%}9. 机器学习
+        {%- elsif node.title == "1. Search" -%}1. 搜索
+        {%- elsif node.title == "3. Games" -%}3. 博弈
+        {%- else -%}{{ node.title }}{%- endif -%}
+      {%- else -%}{{ node.title }}{%- endif -%}</a
     >
     {%- if node.has_children -%} {%- if node.child_nav_order == 'desc' -%} {%-
     assign children_list = pages_list | where: "parent", node.title |

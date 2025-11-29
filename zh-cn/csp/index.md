@@ -1,5 +1,5 @@
 ---
-title: 2. 约束满足问题
+title: 2. CSPs
 nav_order: 2
 has_children: true
 header-includes:

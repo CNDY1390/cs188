@@ -7,7 +7,24 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
   <a
     href="{{ include.node.url | relative_url }}"
     class="nav-list-link{% if page.url == include.node.url %} active{% endif %}"
-    >{{ include.node.title }}</a
+    >{%- comment -%} Display Chinese title for Chinese pages {%- endcomment -%}
+    {%- assign current_lang = "en" -%}
+    {%- if page.url contains "/zh-cn/" -%}
+      {%- assign current_lang = "zh-cn" -%}
+    {%- elsif page.url contains "/es/" -%}
+      {%- assign current_lang = "es" -%}
+    {%- endif -%}
+    {%- if current_lang == "zh-cn" -%}
+      {%- if include.node.title == "2. CSPs" -%}2. 约束满足问题
+      {%- elsif include.node.title == "4. MDPs" -%}4. 马尔可夫决策过程
+      {%- elsif include.node.title == "5. RL" -%}5. 强化学习
+      {%- elsif include.node.title == "6. Bayes Nets" -%}6. 贝叶斯网络
+      {%- elsif include.node.title == "8. HMMs" -%}8. 隐马尔可夫模型
+      {%- elsif include.node.title == "9. ML" -%}9. 机器学习
+      {%- elsif include.node.title == "1. Search" -%}1. 搜索
+      {%- elsif include.node.title == "3. Games" -%}3. 博弈
+      {%- else -%}{{ include.node.title }}{%- endif -%}
+    {%- else -%}{{ include.node.title }}{%- endif -%}</a
   >
   {%- if include.node.has_children and include.depth <= site.max_nav_depth -%}
   {%- comment -%} Get children - must filter by language from URL {%- endcomment -%}
