@@ -20,7 +20,7 @@
     <div id="lang-menu" class="lang-menu" style="display: none;">
       {%- for lang in site.languages -%}
         {%- if lang.code != current_lang -%}
-        <div onclick="switchLang({{ lang.code | jsonify }}, {{ lang.path | jsonify }})" class="lang-option">
+        <div onclick="window.switchLang({{ lang.code | jsonify }}, {{ lang.path | jsonify }})" class="lang-option">
           {{ lang.flag }} {{ lang.name }}
         </div>
         {%- endif -%}
@@ -31,7 +31,8 @@
 
 <script>
 window.switchLang = function(targetCode, targetPath) {
-  var basePath = {{ site.baseurl | jsonify }} || '';
+  var basePath = {{ site.baseurl | jsonify }};
+  if (!basePath) basePath = '';
   if (basePath && basePath.charAt(basePath.length - 1) === '/') {
     basePath = basePath.slice(0, -1);
   }
@@ -39,7 +40,6 @@ window.switchLang = function(targetCode, targetPath) {
   var path = window.location.pathname.replace(basePath, '');
   if (path.charAt(0) !== '/') path = '/' + path;
   
-  // Remove current lang prefix
   var langs = [
     {%- for lang in site.languages -%}
     {code: {{ lang.code | jsonify }}, path: {{ lang.path | jsonify }}}{%- unless forloop.last -%},{%- endunless -%}
@@ -53,15 +53,13 @@ window.switchLang = function(targetCode, targetPath) {
     }
   }
   
-  // Add target lang prefix
-  if (targetPath) {
+  if (targetPath && targetPath !== '') {
     path = '/' + targetPath + path;
   }
   
   window.location.href = basePath + path;
 };
 
-// Close menu when clicking outside
 document.addEventListener('click', function(e) {
   var menu = document.getElementById('lang-menu');
   var btn = document.querySelector('.lang-btn');
