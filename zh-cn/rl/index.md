@@ -1,5 +1,5 @@
 ---
-title: 5. RL
+title: 5. 强化学习
 nav_order: 5
 has_children: true
 header-includes:

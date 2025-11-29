@@ -1,5 +1,5 @@
 ---
-title: 6. Bayes Nets
+title: 6. 贝叶斯网络
 nav_order: 6
 has_children: true
 header-includes: \pagenumbering{gobble}

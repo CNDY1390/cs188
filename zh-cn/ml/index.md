@@ -1,5 +1,5 @@
 ---
-title: 9. ML
+title: 9. 机器学习
 nav_order: 9
 has_children: true
 header-includes:
