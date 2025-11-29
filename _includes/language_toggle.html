@@ -1,6 +1,6 @@
 <!-- Multi-Language Toggle -->
 <script type="text/javascript">
-// Ensure functions are available globally
+// Language configuration and functions
 (function() {
   // Language configuration from Jekyll
   var languages = [];
@@ -104,7 +104,7 @@
     return newPath;
   }
 
-  // Switch to a specific language - MUST be on window object
+  // Switch to a specific language
   window.switchLanguage = function(langCode) {
     try {
       var currentLang = getCurrentLanguage();
@@ -125,16 +125,54 @@
     }
   };
 
-  // Expose for debugging
-  window.getCurrentLanguage = getCurrentLanguage;
-  
-  // Also expose toggleLanguageMenu globally
+  // Toggle language menu
   window.toggleLanguageMenu = function() {
     var menu = document.getElementById('languageMenu');
     if (menu) {
       menu.classList.toggle('show');
     }
   };
+
+  // Initialize when DOM is ready
+  function initLanguageToggle() {
+    // Button click handler
+    var btn = document.getElementById('languageToggleBtn');
+    if (btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        window.toggleLanguageMenu();
+      });
+    }
+
+    // Language option click handlers
+    var options = document.querySelectorAll('.language-option');
+    options.forEach(function(option) {
+      option.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var langCode = this.getAttribute('data-lang');
+        if (langCode && window.switchLanguage) {
+          window.switchLanguage(langCode);
+        }
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      var selector = document.querySelector('.language-selector');
+      var menu = document.getElementById('languageMenu');
+      if (selector && menu && !selector.contains(event.target)) {
+        menu.classList.remove('show');
+      }
+    });
+  }
+
+  // Wait for DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initLanguageToggle);
+  } else {
+    initLanguageToggle();
+  }
 })();
 </script>
 
@@ -146,7 +184,7 @@
       {%- assign current_lang_obj = site.languages | where: "code", "en" | first -%}
     {%- endif -%}
     
-    <button class="language-btn" onclick="window.toggleLanguageMenu && window.toggleLanguageMenu(); return false;" aria-label="选择语言 / Select Language">
+    <button id="languageToggleBtn" class="language-btn" type="button" aria-label="选择语言 / Select Language">
       <span class="language-flag">{{ current_lang_obj.flag }}</span>
       <span class="language-name">{{ current_lang_obj.name }}</span>
       <svg class="language-arrow" viewBox="0 0 24 24" width="16" height="16">
@@ -157,9 +195,9 @@
     <div class="language-menu" id="languageMenu">
       {%- for lang in site.languages -%}
         {%- if lang.code != current_lang -%}
-        <a href="javascript:void(0)" 
-           onclick="if(window.switchLanguage) { window.switchLanguage('{{ lang.code }}'); } return false;" 
-           class="language-option{% if lang.code == current_lang %} active{% endif %}">
+        <a href="#" 
+           data-lang="{{ lang.code }}"
+           class="language-option">
           <span class="language-flag">{{ lang.flag }}</span>
           <span class="language-name">{{ lang.name }}</span>
         </a>
@@ -168,28 +206,6 @@
     </div>
   </div>
 </div>
-
-<script>
-// Close menu when clicking outside
-(function() {
-  // Wait for DOM to be ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLanguageMenu);
-  } else {
-    initLanguageMenu();
-  }
-  
-  function initLanguageMenu() {
-    document.addEventListener('click', function(event) {
-      var selector = document.querySelector('.language-selector');
-      var menu = document.getElementById('languageMenu');
-      if (selector && menu && !selector.contains(event.target)) {
-        menu.classList.remove('show');
-      }
-    });
-  }
-})();
-</script>
 
 <style>
 .language-toggle {
@@ -229,6 +245,10 @@
   transform: translateY(-1px);
 }
 
+.language-btn:active {
+  transform: translateY(0);
+}
+
 .language-flag {
   font-size: 18px;
   line-height: 1;
@@ -263,12 +283,14 @@
   transform: translateY(-10px);
   transition: all 0.2s ease;
   z-index: 1000;
+  pointer-events: none;
 }
 
 .language-menu.show {
   max-height: 500px;
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
 }
 
 .language-option {
@@ -280,6 +302,7 @@
   text-decoration: none;
   transition: background-color 0.15s ease;
   border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
 }
 
 .language-option:last-child {
@@ -328,6 +351,7 @@
   
   .language-option .language-name {
     font-size: 13px;
+    display: block; /* Show in menu */
   }
 }
 
