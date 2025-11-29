@@ -1,5 +1,5 @@
 ---
-title: 【EN】3. Games
+title: 3. Games
 nav_order: 3
 has_children: true
 lang: en
