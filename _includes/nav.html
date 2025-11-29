@@ -57,19 +57,9 @@
   {%- assign pages_list = filtered_pages_list -%}
   {%- for
   node in pages_list -%} {%- if node.parent == nil -%}
-  {%- comment -%} Check nav_exclude, but ignore it if node matches current language {%- endcomment -%}
-  {%- assign node_lang_check = "en" -%}
-  {%- if node.url contains "/zh-cn/" -%}
-    {%- assign node_lang_check = "zh-cn" -%}
-  {%- elsif node.url contains "/es/" -%}
-    {%- assign node_lang_check = "es" -%}
-  {%- endif -%}
-  {%- assign should_exclude = false -%}
-  {%- if node.nav_exclude and node_lang_check != current_lang -%}
-    {%- assign should_exclude = true -%}
-  {%- endif -%}
+  {%- comment -%} pages_list already filtered by language, so nav_exclude is ignored for current language {%- endcomment -%}
   {%- unless
-  should_exclude or node.released == false and jekyll.environment != "debug"
+  node.released == false and jekyll.environment != "debug"
   -%} {%- assign url_size = node.url | size -%} {%- assign prefix = page.url |
   slice: 0, url_size -%}
   <li
@@ -101,19 +91,8 @@
     where_exp:"item", "item.grand_parent == nil" | reverse -%} {%- else -%} {%-
     assign children_list = pages_list | where: "parent", node.title |
     where_exp:"item", "item.grand_parent == nil" -%} {%- endif -%}
-    {%- comment -%} Children already filtered by language in pages_list, but double-check {%- endcomment -%}
-    {%- assign filtered_children = "" | split: "X" -%}
-    {%- for child in children_list -%}
-      {%- assign child_lang = "en" -%}
-      {%- if child.url contains "/zh-cn/" -%}
-        {%- assign child_lang = "zh-cn" -%}
-      {%- elsif child.url contains "/es/" -%}
-        {%- assign child_lang = "es" -%}
-      {%- endif -%}
-      {%- if current_lang == child_lang -%}
-        {%- assign filtered_children = filtered_children | push: child -%}
-      {%- endif -%}
-    {%- endfor -%}
+    {%- comment -%} Children already filtered by language in pages_list {%- endcomment -%}
+    {%- assign filtered_children = children_list -%}
     <ul class="nav-list">
       {%- for child in filtered_children -%} {%- include nav_list.html node=child
       depth=1 -%} {%- comment -%} Hack to display anchors in the navbar for

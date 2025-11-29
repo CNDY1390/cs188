@@ -1,21 +1,5 @@
-{%- comment -%} Check nav_exclude, but ignore it if node matches current language {%- endcomment -%}
-{%- assign current_lang_check = "en" -%}
-{%- if page.url contains "/zh-cn/" -%}
-  {%- assign current_lang_check = "zh-cn" -%}
-{%- elsif page.url contains "/es/" -%}
-  {%- assign current_lang_check = "es" -%}
-{%- endif -%}
-{%- assign node_lang_check = "en" -%}
-{%- if include.node.url contains "/zh-cn/" -%}
-  {%- assign node_lang_check = "zh-cn" -%}
-{%- elsif include.node.url contains "/es/" -%}
-  {%- assign node_lang_check = "es" -%}
-{%- endif -%}
-{%- assign should_exclude = false -%}
-{%- if include.node.nav_exclude and node_lang_check != current_lang_check -%}
-  {%- assign should_exclude = true -%}
-{%- endif -%}
-{%- unless should_exclude or include.node.released == false and
+{%- comment -%} Language already filtered in nav.html, just check exclude {%- endcomment -%}
+{%- unless include.node.released == false and
 jekyll.environment != "debug" -%} {%- assign include.node_url_size =
 include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
 {%- assign prefix = page.url | slice: 0, url_size -%}
