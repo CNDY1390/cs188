@@ -65,10 +65,12 @@ defaults:
   - scope:
       path: "zh-cn"
     values:
+      nav_exclude: true
       lang: zh-cn
   - scope:
       path: "es"
     values:
+      nav_exclude: true
       lang: es
 
 # Exclude from processing.

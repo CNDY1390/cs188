@@ -57,8 +57,19 @@
   {%- assign pages_list = filtered_pages_list -%}
   {%- for
   node in pages_list -%} {%- if node.parent == nil -%}
+  {%- comment -%} Check nav_exclude, but ignore it if node matches current language {%- endcomment -%}
+  {%- assign node_lang_check = "en" -%}
+  {%- if node.url contains "/zh-cn/" -%}
+    {%- assign node_lang_check = "zh-cn" -%}
+  {%- elsif node.url contains "/es/" -%}
+    {%- assign node_lang_check = "es" -%}
+  {%- endif -%}
+  {%- assign should_exclude = false -%}
+  {%- if node.nav_exclude and node_lang_check != current_lang -%}
+    {%- assign should_exclude = true -%}
+  {%- endif -%}
   {%- unless
-  node.nav_exclude or node.released == false and jekyll.environment != "debug"
+  should_exclude or node.released == false and jekyll.environment != "debug"
   -%} {%- assign url_size = node.url | size -%} {%- assign prefix = page.url |
   slice: 0, url_size -%}
   <li
