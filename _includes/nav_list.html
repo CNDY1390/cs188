@@ -1,6 +1,20 @@
-{%- comment -%} Filter by language {%- endcomment -%}
+{%- comment -%} Filter by language - detect from URL path {%- endcomment -%}
 {%- assign current_lang = page.lang | default: "en" -%}
+{%- if page.url contains "/zh-cn/" -%}
+  {%- assign current_lang = "zh-cn" -%}
+{%- elsif page.url contains "/es/" -%}
+  {%- assign current_lang = "es" -%}
+{%- else -%}
+  {%- assign current_lang = "en" -%}
+{%- endif -%}
 {%- assign node_lang = include.node.lang | default: "en" -%}
+{%- if include.node.url contains "/zh-cn/" -%}
+  {%- assign node_lang = "zh-cn" -%}
+{%- elsif include.node.url contains "/es/" -%}
+  {%- assign node_lang = "es" -%}
+{%- else -%}
+  {%- assign node_lang = "en" -%}
+{%- endif -%}
 {%- unless include.node.nav_exclude or include.node.released == false and
 jekyll.environment != "debug" or current_lang != node_lang -%} {%- assign include.node_url_size =
 include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
@@ -17,10 +31,17 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
   site.html_pages | where: "parent", include.node.title | reverse -%} {%- else -%}
   {%- assign children_list = site.html_pages | where: "parent", include.node.title
   -%} {%- endif -%}
-  {%- comment -%} Filter children by language {%- endcomment -%}
+  {%- comment -%} Filter children by language - detect from URL {%- endcomment -%}
   {%- assign filtered_children = "" | split: "X" -%}
   {%- for child in children_list -%}
     {%- assign child_lang = child.lang | default: "en" -%}
+    {%- if child.url contains "/zh-cn/" -%}
+      {%- assign child_lang = "zh-cn" -%}
+    {%- elsif child.url contains "/es/" -%}
+      {%- assign child_lang = "es" -%}
+    {%- else -%}
+      {%- assign child_lang = "en" -%}
+    {%- endif -%}
     {%- if current_lang == child_lang -%}
       {%- assign filtered_children = filtered_children | push: child -%}
     {%- endif -%}
