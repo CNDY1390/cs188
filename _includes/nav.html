@@ -32,29 +32,33 @@
   endif -%} {%- assign sorted_string_ordered_pages = "" | split:"X" -%} {%- for
   group in sorted_string_ordered_groups -%} {%- assign
   sorted_string_ordered_pages = sorted_string_ordered_pages | concat:
-  group.items -%} {%- endfor -%} {%- assign pages_list =
+  group.items -%}   {%- endfor -%} {%- assign pages_list =
   sorted_number_ordered_pages | concat: sorted_string_ordered_pages -%}
-  {%- comment -%} Filter by language - detect from URL path {%- endcomment -%}
-  {%- assign current_lang = page.lang | default: "en" -%}
+  {%- comment -%} Filter by language FIRST - detect from URL path {%- endcomment -%}
+  {%- assign current_lang = "en" -%}
   {%- if page.url contains "/zh-cn/" -%}
     {%- assign current_lang = "zh-cn" -%}
   {%- elsif page.url contains "/es/" -%}
     {%- assign current_lang = "es" -%}
-  {%- else -%}
-    {%- assign current_lang = "en" -%}
   {%- endif -%}
+  {%- comment -%} Filter pages_list to only current language {%- endcomment -%}
+  {%- assign filtered_pages_list = "" | split: "X" -%}
+  {%- for node in pages_list -%}
+    {%- assign node_lang = "en" -%}
+    {%- if node.url contains "/zh-cn/" -%}
+      {%- assign node_lang = "zh-cn" -%}
+    {%- elsif node.url contains "/es/" -%}
+      {%- assign node_lang = "es" -%}
+    {%- endif -%}
+    {%- if current_lang == node_lang -%}
+      {%- assign filtered_pages_list = filtered_pages_list | push: node -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign pages_list = filtered_pages_list -%}
   {%- for
   node in pages_list -%} {%- if node.parent == nil -%}
-  {%- assign node_lang = node.lang | default: "en" -%}
-  {%- if node.url contains "/zh-cn/" -%}
-    {%- assign node_lang = "zh-cn" -%}
-  {%- elsif node.url contains "/es/" -%}
-    {%- assign node_lang = "es" -%}
-  {%- else -%}
-    {%- assign node_lang = "en" -%}
-  {%- endif -%}
   {%- unless
-  node.nav_exclude or node.released == false and jekyll.environment != "debug" or current_lang != node_lang
+  node.nav_exclude or node.released == false and jekyll.environment != "debug"
   -%} {%- assign url_size = node.url | size -%} {%- assign prefix = page.url |
   slice: 0, url_size -%}
   <li
@@ -75,21 +79,8 @@
     where_exp:"item", "item.grand_parent == nil" | reverse -%} {%- else -%} {%-
     assign children_list = pages_list | where: "parent", node.title |
     where_exp:"item", "item.grand_parent == nil" -%} {%- endif -%}
-    {%- comment -%} Filter children by language - detect from URL {%- endcomment -%}
-    {%- assign filtered_children = "" | split: "X" -%}
-    {%- for child in children_list -%}
-      {%- assign child_lang = child.lang | default: "en" -%}
-      {%- if child.url contains "/zh-cn/" -%}
-        {%- assign child_lang = "zh-cn" -%}
-      {%- elsif child.url contains "/es/" -%}
-        {%- assign child_lang = "es" -%}
-      {%- else -%}
-        {%- assign child_lang = "en" -%}
-      {%- endif -%}
-      {%- if current_lang == child_lang -%}
-        {%- assign filtered_children = filtered_children | push: child -%}
-      {%- endif -%}
-    {%- endfor -%}
+    {%- comment -%} Children already filtered by language in pages_list {%- endcomment -%}
+    {%- assign filtered_children = children_list -%}
     <ul class="nav-list">
       {%- for child in filtered_children -%} {%- include nav_list.html node=child
       depth=1 -%} {%- comment -%} Hack to display anchors in the navbar for
