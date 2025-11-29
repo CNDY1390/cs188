@@ -1,5 +1,24 @@
 <!-- Multi-Language Toggle -->
 <script type="text/javascript">
+// Define toggleLanguageMenu FIRST, before any other code
+window.toggleLanguageMenu = function() {
+  console.log('toggleLanguageMenu called');
+  var menu = document.getElementById('languageMenu');
+  console.log('Menu element:', menu);
+  if (menu) {
+    var isShowing = menu.classList.contains('show');
+    console.log('Menu is showing:', isShowing);
+    if (isShowing) {
+      menu.classList.remove('show');
+    } else {
+      menu.classList.add('show');
+    }
+    console.log('Menu classes after toggle:', menu.className);
+  } else {
+    console.error('Menu element not found!');
+  }
+};
+
 // Language configuration and functions
 (function() {
   // Language configuration from Jekyll
@@ -125,24 +144,7 @@
     }
   };
 
-  // Toggle language menu - make it global and simple
-  window.toggleLanguageMenu = function() {
-    console.log('toggleLanguageMenu called');
-    var menu = document.getElementById('languageMenu');
-    console.log('Menu element:', menu);
-    if (menu) {
-      var isShowing = menu.classList.contains('show');
-      console.log('Menu is showing:', isShowing);
-      if (isShowing) {
-        menu.classList.remove('show');
-      } else {
-        menu.classList.add('show');
-      }
-      console.log('Menu classes after toggle:', menu.className);
-    } else {
-      console.error('Menu element not found!');
-    }
-  };
+  // toggleLanguageMenu is already defined at the top of the script
 
   // Initialize when DOM is ready
   function initLanguageToggle() {
