@@ -1,17 +1,20 @@
 <ul class="nav-list">
   {%- comment -%} Filter by language FIRST before processing - detect from URL path {%- endcomment -%}
   {%- assign current_lang = "en" -%}
-  {%- if page.url contains "/zh-cn/" -%}
+  {%- assign page_url_check = page.url -%}
+  {%- if page_url_check contains "/zh-cn/" -%}
     {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page.url contains "/es/" -%}
+  {%- elsif page_url_check contains "/es/" -%}
     {%- assign current_lang = "es" -%}
   {%- endif -%}
   {%- assign lang_filtered_pages = "" | split: "X" -%}
+  {%- assign total_pages = include.pages | size -%}
   {%- for item in include.pages -%}
     {%- assign item_lang = "en" -%}
-    {%- if item.url contains "/zh-cn/" -%}
+    {%- assign item_url_check = item.url -%}
+    {%- if item_url_check contains "/zh-cn/" -%}
       {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item.url contains "/es/" -%}
+    {%- elsif item_url_check contains "/es/" -%}
       {%- assign item_lang = "es" -%}
     {%- endif -%}
     {%- if item_lang == current_lang -%}

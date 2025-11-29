@@ -66,13 +66,11 @@ defaults:
       path: "zh-cn"
       type: "pages"
     values:
-      nav_exclude: true
       lang: zh-cn
   - scope:
       path: "es"
       type: "pages"
     values:
-      nav_exclude: true
       lang: es
 
 # Exclude from processing.
