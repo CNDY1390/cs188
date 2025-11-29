@@ -129,32 +129,44 @@
   window.toggleLanguageMenu = function() {
     var menu = document.getElementById('languageMenu');
     if (menu) {
-      menu.classList.toggle('show');
+      var isShowing = menu.classList.contains('show');
+      if (isShowing) {
+        menu.classList.remove('show');
+      } else {
+        menu.classList.add('show');
+      }
     }
   };
 
   // Initialize when DOM is ready
   function initLanguageToggle() {
-    // Button click handler
+    // Button click handler - use direct event binding
     var btn = document.getElementById('languageToggleBtn');
     if (btn) {
-      btn.onclick = function(e) {
+      btn.addEventListener('click', function(e) {
         e.stopPropagation();
         e.preventDefault();
         window.toggleLanguageMenu();
-      };
+        return false;
+      });
     }
 
     // Language option click handlers - use event delegation
     document.addEventListener('click', function(e) {
-      if (e.target.closest('.language-option')) {
-        var option = e.target.closest('.language-option');
+      var option = e.target.closest('.language-option');
+      if (option) {
         e.preventDefault();
         e.stopPropagation();
         var langCode = option.getAttribute('data-lang');
         if (langCode && window.switchLanguage) {
           window.switchLanguage(langCode);
         }
+        // Close menu after selection
+        var menu = document.getElementById('languageMenu');
+        if (menu) {
+          menu.classList.remove('show');
+        }
+        return false;
       }
     });
 
@@ -244,6 +256,10 @@
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
   white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: auto;
+  z-index: 1001;
 }
 
 .language-btn:hover {
