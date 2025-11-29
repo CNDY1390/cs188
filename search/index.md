@@ -1,5 +1,5 @@
 ---
-title: 1. Search
+title: 【EN】1. Search
 nav_order: 1
 has_children: true
 lang: en

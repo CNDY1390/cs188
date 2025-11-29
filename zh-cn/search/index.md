@@ -1,5 +1,5 @@
 ---
-title: 1. 搜索
+title: 【中文】1. 搜索
 nav_order: 1
 has_children: true
 lang: zh-cn

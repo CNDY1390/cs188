@@ -1,6 +1,6 @@
 ---
-title: 2.2 解决约束满足问题
-parent: 2. CSPs
+title: 【中文】2.2 解决约束满足问题
+parent: 【中文】2. 约束满足问题
 nav_order: 2
 layout: page
 lang: zh-cn

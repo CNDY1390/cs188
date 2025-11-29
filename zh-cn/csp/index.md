@@ -1,5 +1,5 @@
 ---
-title: 2. CSPs
+title: 【中文】2. 约束满足问题
 nav_order: 2
 has_children: true
 lang: zh-cn

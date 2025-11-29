@@ -1,6 +1,6 @@
 ---
-title: 2.1 Constraint Satisfaction Problems
-parent: 2. CSPs
+title: 【EN】2.1 Constraint Satisfaction Problems
+parent: 【EN】2. CSPs
 nav_order: 1
 layout: page
 lang: en
