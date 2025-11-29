@@ -16,12 +16,14 @@ layout: default
 
 {%- comment -%} Remove unrendered children_nav markdown from content if present {%- endcomment -%}
 {%- assign content_clean = content -%}
-{%- if content contains "## TABLE OF CONTENTS" -%}
+{%- if content contains "* * *" -%}
   {%- assign content_parts = content | split: "* * *" -%}
   {%- if content_parts.size > 1 -%}
     {%- assign content_clean = content_parts[0] -%}
     {%- for part in content_parts offset:1 -%}
-      {%- unless part contains "TABLE OF CONTENTS" or part contains "[{{" -%}
+      {%- assign part_stripped = part | strip -%}
+      {%- comment -%} Skip parts that look like unrendered children_nav markdown {%- endcomment -%}
+      {%- unless part_stripped contains "## TABLE OF CONTENTS" or part_stripped contains "]({{" or part_stripped contains "](/cs188/" or part_stripped contains "*   [" -%}
         {%- assign content_clean = content_clean | append: "* * *" | append: part -%}
       {%- endunless -%}
     {%- endfor -%}
