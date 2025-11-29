@@ -237,7 +237,7 @@ window.toggleLanguageMenu = function() {
       {%- assign current_lang_obj = site.languages | where: "code", "en" | first -%}
     {%- endif -%}
     
-    <button id="languageToggleBtn" class="language-btn" type="button" aria-label="选择语言 / Select Language" onclick="window.toggleLanguageMenu(); return false;">
+    <button id="languageToggleBtn" class="language-btn" type="button" aria-label="选择语言 / Select Language" onclick="(function(){var m=document.getElementById('languageMenu');if(m){m.classList.toggle('show');}return false;})();return false;">
       <span class="language-flag">{{ current_lang_obj.flag }}</span>
       <span class="language-name">{{ current_lang_obj.name }}</span>
       <svg class="language-arrow" viewBox="0 0 24 24" width="16" height="16">
