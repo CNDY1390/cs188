@@ -1,5 +1,8 @@
+{%- comment -%} Filter by language {%- endcomment -%}
+{%- assign current_lang = page.lang | default: "en" -%}
+{%- assign node_lang = include.node.lang | default: "en" -%}
 {%- unless include.node.nav_exclude or include.node.released == false and
-jekyll.environment != "debug" -%} {%- assign include.node_url_size =
+jekyll.environment != "debug" or current_lang != node_lang -%} {%- assign include.node_url_size =
 include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
 {%- assign prefix = page.url | slice: 0, url_size -%}
 <li class="nav-list-item {% if include.node.url == prefix %} active{% endif %}">
@@ -9,12 +12,22 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
     >{{ include.node.title }}</a
   >
   {%- if include.node.has_children and include.depth <= site.max_nav_depth -%}
+  {%- comment -%} Get children from all pages (pages_list may not be available in include context) {%- endcomment -%}
   {%- if include.node.child_nav_order == 'desc' -%} {%- assign children_list =
-  pages_list | where: "parent", include.node.title | reverse -%} {%- else -%}
-  {%- assign children_list = pages_list | where: "parent", include.node.title
-  -%} {%- endif -%} {%- assign children_depth = include.depth | plus:1 -%}
+  site.html_pages | where: "parent", include.node.title | reverse -%} {%- else -%}
+  {%- assign children_list = site.html_pages | where: "parent", include.node.title
+  -%} {%- endif -%}
+  {%- comment -%} Filter children by language {%- endcomment -%}
+  {%- assign filtered_children = "" | split: "X" -%}
+  {%- for child in children_list -%}
+    {%- assign child_lang = child.lang | default: "en" -%}
+    {%- if current_lang == child_lang -%}
+      {%- assign filtered_children = filtered_children | push: child -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign children_depth = include.depth | plus:1 -%}
   <ul class="nav-list child">
-    {%- for child in children_list -%} {%- include nav_list.html node=child
+    {%- for child in filtered_children -%} {%- include nav_list.html node=child
     depth=children_depth -%} {%- endfor -%}
   </ul>
   {%- endif -%} {%- endunless -%}

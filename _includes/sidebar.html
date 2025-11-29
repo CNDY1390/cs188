@@ -31,14 +31,10 @@ endcomment -%}
   would pass in the page url as a parameter. I've never noticed a performance
   impact for Berkeley CS sized websites though (<100 pages in the navbar). {%-
   endcomment -%}
-  {%- comment -%} Language-aware navigation {%- endcomment -%}
-  {%- if page.lang == 'zh-cn' -%}
-    <nav aria-label="Main" id="site-nav" class="site-nav">
-      {% include nav.html pages=site.html_pages key=nil %}
-    </nav>
-  {%- else -%}
-    {% include components/site_nav.html %}
-  {%- endif -%}
+  {%- comment -%} Language-aware navigation - use nav.html for all languages {%- endcomment -%}
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+    {% include nav.html pages=site.html_pages key=nil %}
+  </nav>
   {% capture
   nav_footer_custom %} {%- include nav_footer_custom.html -%} {% endcapture %}
   {% if nav_footer_custom != "" %} {{ nav_footer_custom }} {% else %}

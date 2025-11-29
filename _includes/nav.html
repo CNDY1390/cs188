@@ -61,8 +61,16 @@
     where_exp:"item", "item.grand_parent == nil" | reverse -%} {%- else -%} {%-
     assign children_list = pages_list | where: "parent", node.title |
     where_exp:"item", "item.grand_parent == nil" -%} {%- endif -%}
+    {%- comment -%} Filter children by language {%- endcomment -%}
+    {%- assign filtered_children = "" | split: "X" -%}
+    {%- for child in children_list -%}
+      {%- assign child_lang = child.lang | default: "en" -%}
+      {%- if current_lang == child_lang -%}
+        {%- assign filtered_children = filtered_children | push: child -%}
+      {%- endif -%}
+    {%- endfor -%}
     <ul class="nav-list">
-      {%- for child in children_list -%} {%- include nav_list.html node=child
+      {%- for child in filtered_children -%} {%- include nav_list.html node=child
       depth=1 -%} {%- comment -%} Hack to display anchors in the navbar for
       projects. Somewhat adapted from
       https://github.com/just-the-docs/just-the-docs/issues/325. Hopefully Just
