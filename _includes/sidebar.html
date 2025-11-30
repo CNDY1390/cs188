@@ -8,8 +8,29 @@ components/site_nav.html, nav_footer_custom.html Overwrites: nav_footer_custom.
 Should not be cached, because nav_footer_custom.html might depend on page. {%-
 endcomment -%}
 
-<div class="side-bar">
-  <div class="site-header" role="banner">
+<div class="side-bar" style="display: flex; flex-direction: column;">
+  <style>
+    .side-bar {
+      height: 100vh;
+      max-height: 100vh;
+    }
+    .side-bar .site-nav {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      text-align: left;
+      min-height: 0;
+    }
+    .side-bar .site-nav * {
+      text-align: left;
+    }
+    .side-bar .site-nav .nav-list,
+    .side-bar .site-nav .nav-list-item,
+    .side-bar .site-nav .nav-list-link {
+      text-align: left;
+    }
+  </style>
+  <div class="site-header" role="banner" style="flex-shrink: 0;">
     <a href="{{ '/' | relative_url }}" class="site-title lh-tight"
       >{% include title.html %}</a
     >
@@ -38,7 +59,7 @@ endcomment -%}
   {% capture
   nav_footer_custom %} {%- include nav_footer_custom.html -%} {% endcapture %}
   {% if nav_footer_custom != "" %} {{ nav_footer_custom }} {% else %}
-  <footer class="site-footer">
+  <footer class="site-footer" style="flex-shrink: 0;">
     This site uses
     <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>,
     a documentation theme for Jekyll.

@@ -57,6 +57,12 @@ code[style*="color: red"] {
     z-index: 1000;    // Forces header drawn on top of everything else
   }
 
+  // Forces site title in sidebar to be flush with header
+  .side-bar {
+    top: 0;
+    left: 0;
+  }
+
   // Add whitespace between header and start of content (site title, logo)
   .main-content-wrap {
     margin-top: 60px;
