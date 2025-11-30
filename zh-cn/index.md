@@ -18,7 +18,7 @@ _网站建立: [Wesley Zheng](https://wkaiz.github.io)._
 _特别感谢: Ashley Chiu._
 
 _简体中文翻译: CNDY1390_  
-_翻译最后更新: 2025年10月2日（UTC+8）_
+_翻译最后更新: 2025年11月30日（UTC+8）_
 
 
 这是 [加州大学伯克利分校](https://eecs.berkeley.edu/) [CS 188: 人工智能导论](https://inst.eecs.berkeley.edu/~cs188) 课程的配套教材。本书全面介绍了人工智能领域研究的各类主题，重点讲解智能系统的"核心能力"——问题求解、推理、决策制定和学习，以及这些活动的逻辑和概率基础。

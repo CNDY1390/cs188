@@ -1,5 +1,5 @@
 ---
-title: "6.5 D-分离"
+title: 6.5 D-分离
 parent: 6. 贝叶斯网络
 nav_order: 5
 layout: page

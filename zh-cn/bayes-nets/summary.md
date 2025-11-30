@@ -1,5 +1,5 @@
 ---
-title: "6.8 总结"
+title: 6.8 总结
 parent: 6. 贝叶斯网络
 nav_order: 8
 layout: page
