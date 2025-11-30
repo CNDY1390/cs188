@@ -60,7 +60,7 @@
     class="nav-list-item{% if is_active %} active{% endif %}{% if node_has_children %} has-children{% endif %}"
   >
     {%- if node_has_children -%}
-    <a href="javascript:void(0)" class="nav-list-expander" onclick="toggleNavList(this); return false;"
+    <a href="javascript:void(0)" class="nav-list-expander" onclick="(function(e){var li=e.closest('.nav-list-item');if(li){var ul=li.querySelector('ul.nav-list');if(ul){ul.style.display=ul.style.display==='none'||!ul.style.display?'':'none';li.classList.toggle('active',ul.style.display!=='none');}}})(this);return false;"
       ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
     ></a>
     {%- endif -%}

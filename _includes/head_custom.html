@@ -4,29 +4,26 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
 ></script>
 <script>
-  // Global function for nav-list-expander clicks - must be defined before HTML renders
-  // Use window.toggleNavList to ensure global scope
-  window.toggleNavList = function(expander) {
-    var listItem = expander.closest('.nav-list-item');
-    if (listItem) {
-      var childList = listItem.querySelector('ul.nav-list');
-      if (childList) {
-        if (childList.style.display === 'none' || !childList.style.display) {
-          childList.style.display = '';
-          listItem.classList.add('active');
-        } else {
-          childList.style.display = 'none';
-          listItem.classList.remove('active');
+  // Global function for nav-list-expander clicks - must be defined immediately
+  // Use IIFE to ensure it's available before any HTML renders
+  (function() {
+    window.toggleNavList = function(expander) {
+      var listItem = expander.closest('.nav-list-item');
+      if (listItem) {
+        var childList = listItem.querySelector('ul.nav-list');
+        if (childList) {
+          if (childList.style.display === 'none' || !childList.style.display) {
+            childList.style.display = '';
+            listItem.classList.add('active');
+          } else {
+            childList.style.display = 'none';
+            listItem.classList.remove('active');
+          }
         }
       }
-    }
-    return false;
-  };
-  
-  // Also define as regular function for compatibility
-  function toggleNavList(expander) {
-    return window.toggleNavList(expander);
-  }
+      return false;
+    };
+  })();
 
   let toggleDark = () => {
     let setDark = jtd.getTheme() !== 'dark';
