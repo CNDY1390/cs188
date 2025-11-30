@@ -20,7 +20,7 @@ This file is called by sidebar.html (or default layout) to generate navigation
   
   function filterNav() {
     var currentLang = getLang(window.location.pathname);
-    var items = document.querySelectorAll('.site-nav .nav-list > .nav-list-item');
+    var items = document.querySelectorAll('.nav-list > .nav-list-item');
     
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
@@ -29,8 +29,9 @@ This file is called by sidebar.html (or default layout) to generate navigation
       var href = link.getAttribute('href');
       if (!href || href === '#') continue;
       var itemLang = getLang(href);
-      if (itemLang === currentLang) {
-        item.classList.add('lang-visible');
+      if (itemLang !== currentLang) {
+        item.style.display = 'none';
+      } else {
         var childList = item.querySelector('ul.nav-list');
         if (childList) {
           var childItems = childList.querySelectorAll('.nav-list-item');
@@ -40,8 +41,8 @@ This file is called by sidebar.html (or default layout) to generate navigation
               var childHref = childLink.getAttribute('href');
               if (childHref && childHref !== '#') {
                 var childLang = getLang(childHref);
-                if (childLang === currentLang) {
-                  childItems[j].classList.add('lang-visible');
+                if (childLang !== currentLang) {
+                  childItems[j].style.display = 'none';
                 }
               }
             }
@@ -69,9 +70,11 @@ This file is called by sidebar.html (or default layout) to generate navigation
   
   function run() {
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', filterNav);
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(filterNav, 200);
+      });
     } else {
-      filterNav();
+      setTimeout(filterNav, 200);
     }
   }
   
