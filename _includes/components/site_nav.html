@@ -13,34 +13,109 @@ This file is called by sidebar.html (or default layout) to generate navigation
   {%- assign current_lang = page.lang -%}
 {%- endif -%}
 
-{%- comment -%} DEBUG {%- endcomment -%}
-<script>console.log('[site_nav] DEBUG: page.url={{ page.url }}, page.lang={{ page.lang }}, current_lang={{ current_lang }}');</script>
+{%- comment -%} ========== 实验1：验证 page.url 检测 ========== {%- endcomment -%}
+{%- assign exp1_url_contains_zh_cn = false -%}
+{%- assign exp1_url_contains_es = false -%}
+{%- if page.url contains "/zh-cn/" -%}
+  {%- assign exp1_url_contains_zh_cn = true -%}
+{%- endif -%}
+{%- if page.url contains "/es/" -%}
+  {%- assign exp1_url_contains_es = true -%}
+{%- endif -%}
+<script>
+console.log('=== 实验1：page.url 检测 ===');
+console.log('page.url:', {{ page.url | jsonify }});
+console.log('page.path:', {{ page.path | jsonify }});
+console.log('page.lang:', {{ page.lang | jsonify }});
+console.log('page.url contains "/zh-cn/":', {{ exp1_url_contains_zh_cn | jsonify }});
+console.log('page.url contains "/es/":', {{ exp1_url_contains_es | jsonify }});
+console.log('检测到的 current_lang:', {{ current_lang | jsonify }});
+if (typeof window !== 'undefined' && window.location) {
+  console.log('window.location.pathname:', window.location.pathname);
+  console.log('window.location.pathname contains "/zh-cn/":', window.location.pathname.includes('/zh-cn/'));
+}
+</script>
 
-{%- comment -%} Filter site.html_pages by language: use item.lang first, fallback to path {%- endcomment -%}
+{%- comment -%} ========== 实验2：验证 item.lang 设置 ========== {%- endcomment -%}
+{%- assign exp2_en_count = 0 -%}
+{%- assign exp2_zh_cn_count = 0 -%}
+{%- assign exp2_es_count = 0 -%}
+{%- assign exp2_nil_count = 0 -%}
+{%- assign exp2_empty_count = 0 -%}
+{%- assign exp2_path_zh_cn_count = 0 -%}
+{%- assign exp2_path_es_count = 0 -%}
+{%- for item in site.html_pages -%}
+  {%- if item.lang == nil -%}
+    {%- assign exp2_nil_count = exp2_nil_count | plus: 1 -%}
+  {%- elsif item.lang == "" -%}
+    {%- assign exp2_empty_count = exp2_empty_count | plus: 1 -%}
+  {%- elsif item.lang == "en" -%}
+    {%- assign exp2_en_count = exp2_en_count | plus: 1 -%}
+  {%- elsif item.lang == "zh-cn" -%}
+    {%- assign exp2_zh_cn_count = exp2_zh_cn_count | plus: 1 -%}
+  {%- elsif item.lang == "es" -%}
+    {%- assign exp2_es_count = exp2_es_count | plus: 1 -%}
+  {%- endif -%}
+  {%- if item.path contains "zh-cn/" -%}
+    {%- assign exp2_path_zh_cn_count = exp2_path_zh_cn_count | plus: 1 -%}
+  {%- endif -%}
+  {%- if item.path contains "es/" -%}
+    {%- assign exp2_path_es_count = exp2_path_es_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+<script>
+console.log('=== 实验2：item.lang 设置 ===');
+console.log('site.html_pages 总数:', {{ site.html_pages | size }});
+console.log('item.lang == "en":', {{ exp2_en_count }});
+console.log('item.lang == "zh-cn":', {{ exp2_zh_cn_count }});
+console.log('item.lang == "es":', {{ exp2_es_count }});
+console.log('item.lang == nil:', {{ exp2_nil_count }});
+console.log('item.lang == "":', {{ exp2_empty_count }});
+console.log('item.path contains "zh-cn/":', {{ exp2_path_zh_cn_count }});
+console.log('item.path contains "es/":', {{ exp2_path_es_count }});
+if ({{ exp2_path_zh_cn_count }} > 0 && {{ exp2_zh_cn_count }} != {{ exp2_path_zh_cn_count }}) {
+  console.warn('警告：有 {{ exp2_path_zh_cn_count | minus: exp2_zh_cn_count }} 个 zh-cn 路径的页面 lang 属性未正确设置');
+}
+</script>
+
+{%- comment -%} ========== 实验3：验证过滤逻辑 ========== {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
-{%- assign zh_cn_count = 0 -%}
-{%- assign en_count = 0 -%}
+{%- assign exp3_matched_by_lang = 0 -%}
+{%- assign exp3_matched_by_path = 0 -%}
+{%- assign exp3_not_matched = 0 -%}
+{%- assign exp3_wrong_lang_count = 0 -%}
 {%- for item in site.html_pages -%}
   {%- assign item_lang = "en" -%}
+  {%- assign match_method = "default" -%}
   {%- if item.lang != nil and item.lang != "" -%}
     {%- assign item_lang = item.lang -%}
+    {%- assign match_method = "lang" -%}
   {%- elsif item.path contains "zh-cn/" -%}
     {%- assign item_lang = "zh-cn" -%}
+    {%- assign match_method = "path" -%}
   {%- elsif item.path contains "es/" -%}
     {%- assign item_lang = "es" -%}
-  {%- endif -%}
-  {%- if item_lang == "zh-cn" -%}
-    {%- assign zh_cn_count = zh_cn_count | plus: 1 -%}
-  {%- elsif item_lang == "en" -%}
-    {%- assign en_count = en_count | plus: 1 -%}
+    {%- assign match_method = "path" -%}
   {%- endif -%}
   {%- if item_lang == current_lang -%}
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
+    {%- if match_method == "lang" -%}
+      {%- assign exp3_matched_by_lang = exp3_matched_by_lang | plus: 1 -%}
+    {%- elsif match_method == "path" -%}
+      {%- assign exp3_matched_by_path = exp3_matched_by_path | plus: 1 -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- assign exp3_not_matched = exp3_not_matched | plus: 1 -%}
   {%- endif -%}
 {%- endfor -%}
-
-{%- comment -%} DEBUG {%- endcomment -%}
-<script>console.log('[site_nav] DEBUG: Total={{ site.html_pages | size }}, EN={{ en_count }}, ZH-CN={{ zh_cn_count }}, Filtered={{ lang_filtered_pages | size }}, Current={{ current_lang }}');</script>
+<script>
+console.log('=== 实验3：过滤逻辑 ===');
+console.log('匹配当前语言 (通过 lang):', {{ exp3_matched_by_lang }});
+console.log('匹配当前语言 (通过 path):', {{ exp3_matched_by_path }});
+console.log('不匹配:', {{ exp3_not_matched }});
+console.log('过滤后总数:', {{ lang_filtered_pages | size }});
+console.log('当前语言:', {{ current_lang | jsonify }});
+</script>
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}
