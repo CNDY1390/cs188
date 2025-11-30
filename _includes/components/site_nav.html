@@ -1,15 +1,11 @@
 {%- comment -%} 
 Override Just the Docs components/site_nav.html with language filtering
 This file is called by sidebar.html (or default layout) to generate navigation
+FORCE CHINESE FOR TESTING
 {%- endcomment -%}
 
-{%- comment -%} Filter by language FIRST - detect from URL path {%- endcomment -%}
-{%- assign current_lang = "en" -%}
-{%- if page.url contains "/zh-cn/" -%}
-  {%- assign current_lang = "zh-cn" -%}
-{%- elsif page.url contains "/es/" -%}
-  {%- assign current_lang = "es" -%}
-{%- endif -%}
+{%- comment -%} FORCE CHINESE - TEST ONLY {%- endcomment -%}
+{%- assign current_lang = "zh-cn" -%}
 
 {%- comment -%} Filter site.html_pages by language {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
