@@ -37,15 +37,28 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     /* Add event to dark mode button. */
+    // Find Dark Mode button by checking all site-buttons
     let buttons = document.getElementsByClassName('site-button');
-    if (buttons.length > 2) {
-      let a = buttons[2];
-      if (a) {
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          toggleDark();
-        });
+    let darkModeButton = null;
+    for (let i = 0; i < buttons.length; i++) {
+      let btn = buttons[i];
+      // Check if it's a link (aux_links generate <a> tags)
+      if (btn.tagName === 'A' && (btn.href === '#' || btn.href.endsWith('#') || btn.textContent.trim() === 'Dark Mode')) {
+        darkModeButton = btn;
+        break;
       }
+      // Also check parent if it's wrapped
+      let parent = btn.closest('a');
+      if (parent && (parent.href === '#' || parent.href.endsWith('#') || parent.textContent.trim() === 'Dark Mode')) {
+        darkModeButton = parent;
+        break;
+      }
+    }
+    if (darkModeButton) {
+      darkModeButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleDark();
+      });
     }
 
     /* Read local storage state. */
