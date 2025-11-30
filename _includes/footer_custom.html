@@ -16,18 +16,26 @@
 
 <script src="{{ '/assets/js/tocbot.min.js' | relative_url }}"></script>
 <script>
-  tocbot.init({
-    tocSelector: '.js-toc',
-    contentSelector: '.main-content',
-    headingSelector: 'h2, h3',
-    ignoreSelector: '.no_toc',
-    hasInnerContainers: false,
-    linkClass: 'nav-list-link',
-    activeLinkClass: 'active',
-    listClass: 'nav-list',
-    listItemClass: 'nav-list-item',
-    activeListItemClass: 'active',
-    collapseDepth: 3,
-    scrollSmooth: false,
-  });
+  (function() {
+    var mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+      var headings = mainContent.querySelectorAll('h2, h3');
+      if (headings.length > 0) {
+        tocbot.init({
+          tocSelector: '.js-toc',
+          contentSelector: '.main-content',
+          headingSelector: 'h2, h3',
+          ignoreSelector: '.no_toc',
+          hasInnerContainers: false,
+          linkClass: 'nav-list-link',
+          activeLinkClass: 'active',
+          listClass: 'nav-list',
+          listItemClass: 'nav-list-item',
+          activeListItemClass: 'active',
+          collapseDepth: 3,
+          scrollSmooth: false,
+        });
+      }
+    }
+  })();
 </script>

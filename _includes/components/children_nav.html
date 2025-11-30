@@ -22,6 +22,30 @@ Override the default Just the Docs children_nav.html to filter by language
 {%- endif -%}
 
 {%- if nav_children.size >= 1 -%}
+  {%- comment -%} Sort by nav_order (same logic as nav.html) {%- endcomment -%}
+  {%- assign string_ordered_pages = nav_children | where_exp:"item", "item.nav_order == nil" -%}
+  {%- assign nav_ordered_pages = nav_children | where_exp:"item", "item.nav_order != nil" -%}
+  {%- assign nav_ordered_groups = nav_ordered_pages | group_by_exp:"item", "item.nav_order | jsonify | slice: 0" -%}
+  {%- assign number_ordered_pages = "" | split:"X" -%}
+  {%- for group in nav_ordered_groups -%}
+    {%- if group.name == '"' -%}
+      {%- assign string_ordered_pages = string_ordered_pages | concat: group.items -%}
+    {%- else -%}
+      {%- assign number_ordered_pages = number_ordered_pages | concat: group.items -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- assign sorted_number_ordered_pages = number_ordered_pages | sort:"nav_order" -%}
+  {%- assign string_ordered_groups = string_ordered_pages | group_by_exp:"item", "item.nav_order | default: item.title | append:''" -%}
+  {%- if site.nav_sort == 'case_insensitive' -%}
+    {%- assign sorted_string_ordered_groups = string_ordered_groups | sort_natural:"name" -%}
+  {%- else -%}
+    {%- assign sorted_string_ordered_groups = string_ordered_groups | sort:"name" -%}
+  {%- endif -%}
+  {%- assign sorted_string_ordered_pages = "" | split:"X" -%}
+  {%- for group in sorted_string_ordered_groups -%}
+    {%- assign sorted_string_ordered_pages = sorted_string_ordered_pages | concat: group.items -%}
+  {%- endfor -%}
+  {%- assign nav_children = sorted_number_ordered_pages | concat: sorted_string_ordered_pages -%}
   {%- if page.child_nav_order == 'desc' or page.child_nav_order == 'reversed' -%}
     {%- assign nav_children = nav_children | reverse -%}
   {%- endif -%}
