@@ -8,9 +8,20 @@ components/site_nav.html, nav_footer_custom.html Overwrites: nav_footer_custom.
 Should not be cached, because nav_footer_custom.html might depend on page. {%-
 endcomment -%}
 
-<div class="side-bar" style="display: flex; flex-direction: column; height: 100vh;">
+<div class="side-bar" style="display: flex; flex-direction: column;">
   <style>
+    .side-bar {
+      height: 100vh;
+      max-height: 100vh;
+    }
     .side-bar .site-nav {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      text-align: left;
+      min-height: 0;
+    }
+    .side-bar .site-nav * {
       text-align: left;
     }
     .side-bar .site-nav .nav-list,
@@ -42,7 +53,7 @@ endcomment -%}
   impact for Berkeley CS sized websites though (<100 pages in the navbar). {%-
   endcomment -%}
   {%- comment -%} Language-aware navigation - use components/site_nav.html {%- endcomment -%}
-  <nav aria-label="Main" id="site-nav" class="site-nav" style="flex: 1; overflow-y: auto; overflow-x: hidden; text-align: left; min-height: 0;">
+  <nav aria-label="Main" id="site-nav" class="site-nav">
     {% include components/site_nav.html %}
   </nav>
   {% capture
