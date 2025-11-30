@@ -11,9 +11,8 @@ This file is called by sidebar.html (or default layout) to generate navigation
 
 {%- comment -%} 客户端语言检测和过滤 {%- endcomment -%}
 <script>
-console.log('[site_nav] Script loading');
-(function() {
-  console.log('[site_nav] Script started');
+try {
+  console.log('[site_nav] Script executing');
   
   function getLang(path) {
     if (path.indexOf('/zh-cn/') !== -1) return 'zh-cn';
@@ -22,21 +21,19 @@ console.log('[site_nav] Script loading');
   }
   
   function filterNav() {
-    console.log('[site_nav] filterNav called');
+    console.log('[site_nav] filterNav start');
     var currentLang = getLang(window.location.pathname);
-    console.log('[site_nav] Current lang:', currentLang, 'path:', window.location.pathname);
+    console.log('[site_nav] lang:', currentLang);
     
     var items = document.querySelectorAll('.nav-list > .nav-list-item');
-    console.log('[site_nav] Found', items.length, 'items');
+    console.log('[site_nav] items:', items.length);
     
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
       var link = item.querySelector('.nav-list-link');
       if (!link) continue;
-      
       var href = link.getAttribute('href');
       if (!href || href === '#') continue;
-      
       var itemLang = getLang(href);
       if (itemLang !== currentLang) {
         item.style.display = 'none';
@@ -60,13 +57,12 @@ console.log('[site_nav] Script loading');
       }
     }
     
-    // 绑定展开按钮点击事件
     var expanders = document.querySelectorAll('.nav-list-expander');
-    console.log('[site_nav] Found', expanders.length, 'expanders');
+    console.log('[site_nav] expanders:', expanders.length);
     for (var k = 0; k < expanders.length; k++) {
       var exp = expanders[k];
       exp.addEventListener('click', function(e) {
-        console.log('[site_nav] Expander clicked');
+        console.log('[site_nav] click');
         e.preventDefault();
         e.stopPropagation();
         var listItem = e.target.closest('.nav-list-item');
@@ -76,26 +72,27 @@ console.log('[site_nav] Script loading');
         var isHidden = window.getComputedStyle(childList).display === 'none';
         childList.style.display = isHidden ? 'block' : 'none';
         listItem.classList.toggle('active', isHidden);
-        console.log('[site_nav] Toggled, display:', childList.style.display);
       });
     }
   }
   
-  function init() {
-    console.log('[site_nav] init called');
-    setTimeout(function() {
-      console.log('[site_nav] setTimeout executed');
-      filterNav();
-    }, 300);
+  function run() {
+    console.log('[site_nav] run, readyState:', document.readyState);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('[site_nav] DOMContentLoaded');
+        setTimeout(filterNav, 200);
+      });
+    } else {
+      console.log('[site_nav] already ready');
+      setTimeout(filterNav, 200);
+    }
   }
   
-  if (document.readyState === 'loading') {
-    console.log('[site_nav] Waiting for DOMContentLoaded');
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    console.log('[site_nav] Document ready, calling init');
-    init();
-  }
-})();
+  run();
+} catch(e) {
+  console.error('[site_nav] Error:', e);
+}
 </script>
+
 
