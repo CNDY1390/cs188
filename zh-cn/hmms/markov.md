@@ -1,6 +1,6 @@
 ---
 title: 8.1 马尔可夫模型
-parent: 8. HMMs
+parent: 8. 隐马尔可夫模型
 nav_order: 1
 layout: page
 header-includes: \pagenumbering{gobble}

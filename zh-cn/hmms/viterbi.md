@@ -1,6 +1,6 @@
 ---
 title: 8.3 维特比算法
-parent: 8. HMMs
+parent: 8. 隐马尔可夫模型
 nav_order: 3
 layout: page
 header-includes:

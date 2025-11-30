@@ -1,11 +1,10 @@
 ---
-title: 1.2 State Spaces and Search Problems
+title: 1.2 状态空间与搜索问题
 parent: 1. 搜索
 nav_order: 2
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.2 State Spaces and Search Problems (状态空间与搜索问题)

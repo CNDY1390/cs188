@@ -1,6 +1,6 @@
 ---
 title: "9.1 机器学习"
-parent: 9. ML
+parent: 9. 机器学习
 nav_order: 1
 layout: page
 header-includes:

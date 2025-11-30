@@ -1,6 +1,6 @@
 ---
 title: 8.4 粒子滤波
-parent: 8. HMMs
+parent: 8. 隐马尔可夫模型
 nav_order: 4
 layout: page
 header-includes:

@@ -1,6 +1,6 @@
 ---
 title: 4.2 解决马尔可夫决策过程
-parent: 4. MDPs
+parent: 4. 马尔可夫决策过程
 nav_order: 2
 layout: page
 header-includes:

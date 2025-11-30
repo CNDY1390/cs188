@@ -1,6 +1,6 @@
 ---
 title: '6.4 贝叶斯网络的结构'
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 4
 layout: page
 header-includes:

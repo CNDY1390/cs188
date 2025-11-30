@@ -1,5 +1,5 @@
 ---
-title: 8. HMMs
+title: 8. 隐马尔可夫模型
 nav_order: 8
 has_children: true
 header-includes: \pagenumbering{gobble}

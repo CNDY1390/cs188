@@ -1,6 +1,6 @@
 ---
 title: 8.5 总结
-parent: 8. HMMs
+parent: 8. 隐马尔可夫模型
 nav_order: 5
 layout: page
 header-includes:

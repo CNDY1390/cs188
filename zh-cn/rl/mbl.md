@@ -1,6 +1,6 @@
 ---
 title: 5.2 基于模型的学习
-parent: 5. RL
+parent: 5. 强化学习
 nav_order: 2
 layout: page
 header-includes:

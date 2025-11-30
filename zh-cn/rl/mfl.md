@@ -1,6 +1,6 @@
 ---
 title: 5.3 无模型学习
-parent: 5. RL
+parent: 5. 强化学习
 nav_order: 3
 layout: page
 header-includes:

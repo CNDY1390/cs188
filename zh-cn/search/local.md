@@ -1,11 +1,10 @@
 ---
-title: 1.5 Local Search
+title: 1.5 局部搜索
 parent: 1. 搜索
 nav_order: 5
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.5 Local Search (局部搜索)

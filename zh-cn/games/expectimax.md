@@ -1,12 +1,10 @@
 ---
-title: 3.3 Expectimax
+title: 3.3 期望极大
 parent: 3. 博弈
 nav_order: 3
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 3.3 Expectimax

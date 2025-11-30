@@ -1,6 +1,6 @@
 ---
 title: '6.6 贝叶斯网络中的精确推理'
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 6
 layout: page
 header-includes:

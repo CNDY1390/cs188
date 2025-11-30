@@ -1,6 +1,6 @@
 ---
 title: "6.1 概率概要"
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 1
 layout: page
 header-includes:

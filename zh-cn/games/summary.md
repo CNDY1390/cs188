@@ -1,9 +1,8 @@
 ---
-title: 3.6 Summary
+title: 3.6 本章小结
 parent: 3. 博弈
 nav_order: 6
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

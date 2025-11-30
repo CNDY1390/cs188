@@ -1,9 +1,8 @@
 ---
 title: 2.6 总结
-parent: 2. CSPs
+parent: 2. 约束满足问题
 nav_order: 6
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

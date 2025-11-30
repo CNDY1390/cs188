@@ -1,11 +1,10 @@
 ---
-title: 1.1 Agents
+title: 1.1 智能体
 parent: 1. 搜索
 nav_order: 1
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.1 Agents (智能体)

@@ -1,6 +1,6 @@
 ---
 title: 5.4 探索与利用
-parent: 5. RL
+parent: 5. 强化学习
 nav_order: 4
 layout: page
 header-includes:

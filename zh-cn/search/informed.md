@@ -1,11 +1,10 @@
 ---
-title: 1.4 Informed Search
+title: 1.4 有信息搜索
 parent: 1. 搜索
 nav_order: 4
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.4 Informed Search (有信息搜索)

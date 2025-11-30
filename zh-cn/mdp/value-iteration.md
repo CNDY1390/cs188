@@ -1,6 +1,6 @@
 ---
 title: 4.3 值迭代
-parent: 4. MDPs
+parent: 4. 马尔可夫决策过程
 nav_order: 3
 layout: page
 header-includes:

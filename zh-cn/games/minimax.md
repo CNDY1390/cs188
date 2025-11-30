@@ -1,12 +1,10 @@
 ---
-title: 3.2 Minimax
+title: 3.2 极小极大
 parent: 3. 博弈
 nav_order: 2
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 3.2 Minimax

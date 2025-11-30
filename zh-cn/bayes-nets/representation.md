@@ -1,6 +1,6 @@
 ---
 title: '6.3 贝叶斯网络表示'
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 3
 layout: page
 header-includes:

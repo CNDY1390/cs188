@@ -3,7 +3,6 @@ title: 3.1 博弈
 parent: 3. 博弈
 nav_order: 1
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

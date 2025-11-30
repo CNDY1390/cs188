@@ -1,12 +1,10 @@
 ---
-title: 3.4 General Games
+title: 3.4 通用博弈
 parent: 3. 博弈
 nav_order: 4
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 3.4 General Games (通用博弈)

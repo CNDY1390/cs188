@@ -1,6 +1,6 @@
 ---
 title: "6.7 贝叶斯网络中的近似推理：采样"
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 7
 layout: page
 header-includes:

@@ -1,6 +1,6 @@
 ---
 title: 4.4 策略迭代
-parent: 4. MDPs
+parent: 4. 马尔可夫决策过程
 nav_order: 4
 layout: page
 header-includes:

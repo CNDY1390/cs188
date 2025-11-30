@@ -1,6 +1,6 @@
 ---
 title: 4.5 总结
-parent: 4. MDPs
+parent: 4. 马尔可夫决策过程
 nav_order: 5
 layout: page
 header-includes:

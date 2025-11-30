@@ -1,11 +1,10 @@
 ---
-title: 1.6 Summary
+title: 1.6 本章小结
 parent: 1. 搜索
 nav_order: 6
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.6 Summary (本章小结)

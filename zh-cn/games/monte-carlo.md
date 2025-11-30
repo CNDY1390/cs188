@@ -1,12 +1,10 @@
 ---
-title: 3.5 Monte Carlo Tree Search
+title: 3.5 蒙特卡洛树搜索
 parent: 3. 博弈
 nav_order: 5
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 3.5 Monte Carlo Tree Search (蒙特卡洛树搜索)

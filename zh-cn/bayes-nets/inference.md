@@ -1,6 +1,6 @@
 ---
 title: '6.2 概率推理'
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 2
 layout: page
 header-includes:

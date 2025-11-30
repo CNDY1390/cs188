@@ -1,9 +1,8 @@
 ---
 title: 2.2 解决约束满足问题
-parent: 2. CSPs
+parent: 2. 约束满足问题
 nav_order: 2
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

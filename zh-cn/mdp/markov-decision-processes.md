@@ -1,9 +1,8 @@
 ---
 title: 4.1 马尔可夫决策过程
-parent: 4. MDPs
+parent: 4. 马尔可夫决策过程
 nav_order: 1
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

@@ -1,9 +1,8 @@
 ---
 title: 2.3 过滤
-parent: 2. CSPs
+parent: 2. 约束满足问题
 nav_order: 3
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

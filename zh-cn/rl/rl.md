@@ -1,6 +1,6 @@
 ---
 title: 5.1 强化学习
-parent: 5. RL
+parent: 5. 强化学习
 nav_order: 1
 layout: page
 header-includes:

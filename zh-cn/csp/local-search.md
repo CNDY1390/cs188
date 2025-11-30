@@ -1,9 +1,8 @@
 ---
 title: 2.5 局部搜索
-parent: 2. CSPs
+parent: 2. 约束满足问题
 nav_order: 5
 layout: page
- 
 header-includes:
     \pagenumbering{gobble}
 ---

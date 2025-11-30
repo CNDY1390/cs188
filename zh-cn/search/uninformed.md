@@ -1,11 +1,10 @@
 ---
-title: 1.3 Uninformed Search
+title: 1.3 无信息搜索
 parent: 1. 搜索
 nav_order: 3
 layout: page
 header-includes:
     \pagenumbering{gobble}
- 
 ---
 
 # 1.3 Uninformed Search (无信息搜索)

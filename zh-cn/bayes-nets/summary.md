@@ -1,8 +1,10 @@
 ---
 title: "6.8 总结"
-parent: 6. Bayes Nets
+parent: 6. 贝叶斯网络
 nav_order: 8
 layout: page
+header-includes:
+    \pagenumbering{gobble}
 ---
 
 ## 6.8 总结 (Summary)

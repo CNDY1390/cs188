@@ -1,6 +1,6 @@
 ---
 title: 5.5 总结
-parent: 5. RL
+parent: 5. 强化学习
 nav_order: 5
 layout: page
 header-includes:
