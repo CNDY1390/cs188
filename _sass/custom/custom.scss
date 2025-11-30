@@ -1,3 +1,32 @@
+// Sidebar navigation scroll and text alignment (global)
+.side-bar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.site-header {
+  flex-shrink: 0;
+}
+
+.site-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-align: left;
+  min-height: 0;
+}
+
+.site-footer {
+  flex-shrink: 0;
+}
+
+.site-nav .nav-list,
+.site-nav .nav-list-item,
+.site-nav .nav-list-link {
+  text-align: left;
+}
+
 .algorithm p {
   margin-top: 0;
   margin-bottom: 0;
@@ -61,6 +90,19 @@ code[style*="color: red"] {
   .side-bar {
     top: 0;
     left: 0;
+  }
+
+  .site-header {
+    flex-shrink: 0;
+  }
+
+  // Sidebar navigation scroll support
+  .site-nav {
+    min-height: 0;
+  }
+
+  .site-footer {
+    flex-shrink: 0;
   }
 
   // Add whitespace between header and start of content (site title, logo)
