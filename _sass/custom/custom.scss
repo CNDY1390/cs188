@@ -1,3 +1,16 @@
+// Left sidebar navigation styles
+.side-bar .site-nav {
+  overflow-y: auto;
+  overflow-x: hidden;
+  text-align: left;
+}
+
+.side-bar .site-nav .nav-list,
+.side-bar .site-nav .nav-list-item,
+.side-bar .site-nav .nav-list-link {
+  text-align: left;
+}
+
 .algorithm p {
   margin-top: 0;
   margin-bottom: 0;
@@ -91,7 +104,7 @@ code[style*="color: red"] {
   }
 
   .content {
-    max-width: 75%
+    max-width: 75%;
   }
 
   .content-nav {
@@ -180,6 +193,20 @@ code[style*="color: red"] {
   padding-top: 0.65rem !important;
   padding-bottom: 0.65rem !important;
   text-decoration: none;
+}
+
+// Hide navigation items by default, show only after language filtering
+.site-nav .nav-list > .nav-list-item {
+  display: none;
+}
+.site-nav .nav-list > .nav-list-item.lang-visible {
+  display: list-item;
+}
+.site-nav .nav-list .nav-list .nav-list-item {
+  display: none;
+}
+.site-nav .nav-list .nav-list .nav-list-item.lang-visible {
+  display: list-item;
 }
 
 .nav-list-expander .btn-reset,
