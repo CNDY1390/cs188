@@ -3,40 +3,17 @@ Override Just the Docs components/site_nav.html with language filtering
 This file is called by sidebar.html (or default layout) to generate navigation
 {%- endcomment -%}
 
-{%- comment -%} Filter by language - detect from URL path {%- endcomment -%}
-{%- assign current_lang = "en" -%}
-{%- assign page_path = page.url -%}
-{%- if site.baseurl and page_path contains site.baseurl -%}
-  {%- assign baseurl_len = site.baseurl | size -%}
-  {%- assign page_path = page_path | slice: baseurl_len, 999 -%}
-{%- endif -%}
-<!-- DEBUG: page.url={{ page.url }}, page_path={{ page_path }} -->
-{%- if page_path contains "/zh-cn/" or page.url contains "/zh-cn/" -%}
-  {%- assign current_lang = "zh-cn" -%}
-{%- elsif page_path contains "/es/" or page.url contains "/es/" -%}
-  {%- assign current_lang = "es" -%}
-{%- endif -%}
-<!-- DEBUG: current_lang={{ current_lang }}, total_pages={{ site.html_pages | size }} -->
+{%- comment -%} Get current language from page.lang (set by _config.yml defaults) {%- endcomment -%}
+{%- assign current_lang = page.lang | default: "en" -%}
 
 {%- comment -%} Filter site.html_pages by language {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
 {%- for item in site.html_pages -%}
-  {%- assign item_lang = "en" -%}
-  {%- assign item_path = item.url -%}
-  {%- if site.baseurl and item_path contains site.baseurl -%}
-    {%- assign baseurl_len = site.baseurl | size -%}
-    {%- assign item_path = item_path | slice: baseurl_len, 999 -%}
-  {%- endif -%}
-  {%- if item_path contains "/zh-cn/" or item.url contains "/zh-cn/" -%}
-    {%- assign item_lang = "zh-cn" -%}
-  {%- elsif item_path contains "/es/" or item.url contains "/es/" -%}
-    {%- assign item_lang = "es" -%}
-  {%- endif -%}
+  {%- assign item_lang = item.lang | default: "en" -%}
   {%- if item_lang == current_lang -%}
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
   {%- endif -%}
 {%- endfor -%}
-<!-- DEBUG: filtered_pages={{ lang_filtered_pages | size }} -->
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}

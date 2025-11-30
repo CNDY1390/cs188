@@ -2,7 +2,6 @@
 title: 2. CSPs
 nav_order: 2
 has_children: true
-lang: en
 header-includes:
     \pagenumbering{gobble}
 ---
