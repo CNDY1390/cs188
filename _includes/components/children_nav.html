@@ -44,10 +44,9 @@ Override the default Just the Docs children_nav.html to filter by language
     currentLang = 'es';
   }
   
-  var tocHeading = document.querySelector('h2:contains("TABLE OF CONTENTS")') || 
-                    Array.from(document.querySelectorAll('h2')).find(function(h2) {
-                      return h2.textContent.includes('TABLE OF CONTENTS');
-                    });
+  var tocHeading = Array.from(document.querySelectorAll('h2')).find(function(h2) {
+    return h2.textContent.includes('TABLE OF CONTENTS');
+  });
   if (!tocHeading) return;
   
   var list = tocHeading.nextElementSibling;
