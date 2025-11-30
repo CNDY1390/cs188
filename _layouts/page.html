@@ -38,4 +38,57 @@ layout: default
     anchor_class="nav-list-link" h_min=1 h_max=3 %}
   </nav>
   <div class="content">{{ content }}{{ children_markdown }}</div>
+  {%- if children_content != "" -%}
+  <script>
+  (function() {
+    function getLangFromPath(path) {
+      if (path.indexOf('/zh-cn/') !== -1) return 'zh-cn';
+      if (path.indexOf('/es/') !== -1) return 'es';
+      return 'en';
+    }
+    
+    function filterChildrenNav() {
+      var pathname = window.location.pathname;
+      var currentLang = getLangFromPath(pathname);
+      
+      var hrElements = document.querySelectorAll('hr');
+      var targetList = null;
+      for (var i = 0; i < hrElements.length; i++) {
+        var nextSibling = hrElements[i].nextElementSibling;
+        while (nextSibling) {
+          if (nextSibling.tagName === 'UL') {
+            targetList = nextSibling;
+            break;
+          }
+          nextSibling = nextSibling.nextElementSibling;
+        }
+        if (targetList) break;
+      }
+      
+      if (!targetList) return;
+      
+      var links = targetList.querySelectorAll('a');
+      for (var i = 0; i < links.length; i++) {
+        var link = links[i];
+        var href = link.getAttribute('href');
+        if (!href) continue;
+        
+        var itemLang = getLangFromPath(href);
+        if (itemLang !== currentLang) {
+          var listItem = link.closest('li');
+          if (listItem) {
+            listItem.style.display = 'none';
+          }
+        }
+      }
+    }
+    
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', filterChildrenNav);
+    } else {
+      setTimeout(filterChildrenNav, 100);
+    }
+  })();
+  </script>
+  {%- endif -%}
 </div>
