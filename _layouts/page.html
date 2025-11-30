@@ -9,21 +9,45 @@ layout: default
 {%- include components/children_nav.html -%}
 {%- endcapture -%}
 {%- if children_content != "" -%}
-  {%- assign children_markdown = children_content | markdownify -%}
+  {%- comment -%} Remove any script tags that might have been included {%- endcomment -%}
+  {%- if children_content contains "<script>" -%}
+    {%- assign script_parts = children_content | split: "<script>" -%}
+    {%- assign children_content_clean = script_parts[0] -%}
+    {%- for part in script_parts offset:1 -%}
+      {%- assign after_script = part | split: "</script>" -%}
+      {%- if after_script.size > 1 -%}
+        {%- assign children_content_clean = children_content_clean | append: after_script[1] -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- assign children_content_clean = children_content -%}
+  {%- endif -%}
+  {%- assign children_markdown = children_content_clean | markdownify -%}
 {%- else -%}
   {%- assign children_markdown = "" -%}
 {%- endif -%}
 
-{%- comment -%} Remove unrendered children_nav markdown from content if present {%- endcomment -%}
+{%- comment -%} Remove unrendered children_nav markdown and script tags from content if present {%- endcomment -%}
 {%- assign content_clean = content -%}
-{%- if content contains "* * *" -%}
-  {%- assign content_parts = content | split: "* * *" -%}
+{%- comment -%} Remove script tags from content {%- endcomment -%}
+{%- if content_clean contains "<script>" -%}
+  {%- assign script_parts = content_clean | split: "<script>" -%}
+  {%- assign content_clean = script_parts[0] -%}
+  {%- for part in script_parts offset:1 -%}
+    {%- assign after_script = part | split: "</script>" -%}
+    {%- if after_script.size > 1 -%}
+      {%- assign content_clean = content_clean | append: after_script[1] -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- if content_clean contains "* * *" -%}
+  {%- assign content_parts = content_clean | split: "* * *" -%}
   {%- if content_parts.size > 1 -%}
     {%- assign content_clean = content_parts[0] -%}
     {%- for part in content_parts offset:1 -%}
       {%- assign part_stripped = part | strip -%}
-      {%- comment -%} Skip parts that look like unrendered children_nav markdown {%- endcomment -%}
-      {%- unless part_stripped contains "## TABLE OF CONTENTS" or part_stripped contains "]({{" or part_stripped contains "](/cs188/" or part_stripped contains "*   [" -%}
+      {%- comment -%} Skip parts that look like unrendered children_nav markdown or contain JavaScript {%- endcomment -%}
+      {%- unless part_stripped contains "## TABLE OF CONTENTS" or part_stripped contains "]({{" or part_stripped contains "](/cs188/" or part_stripped contains "*   [" or part_stripped contains "function filterChildrenNav" or part_stripped contains "getLangFromPath" -%}
         {%- assign content_clean = content_clean | append: "* * *" | append: part -%}
       {%- endunless -%}
     {%- endfor -%}
