@@ -4,6 +4,11 @@ jekyll.environment != "debug" -%} {%- assign include.node_url_size =
 include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
 {%- assign prefix = page.url | slice: 0, url_size -%}
 <li class="nav-list-item {% if include.node.url == prefix %} active{% endif %}">
+  {%- if include.node.has_children -%}
+  <a href="#" class="nav-list-expander"
+    ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
+  ></a>
+  {%- endif -%}
   <a
     href="{{ include.node.url | relative_url }}"
     class="nav-list-link{% if page.url == include.node.url %} active{% endif %}"
