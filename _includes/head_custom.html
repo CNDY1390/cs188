@@ -15,38 +15,7 @@
   };
 
   window.addEventListener('DOMContentLoaded', () => {
-    /* Filter navigation by language using JavaScript */
-    var currentPath = window.location.pathname;
-    var currentLang = 'en';
-    if (currentPath.indexOf('/zh-cn/') !== -1) {
-      currentLang = 'zh-cn';
-    } else if (currentPath.indexOf('/es/') !== -1) {
-      currentLang = 'es';
-    }
-    
-    // Hide navigation items that don't match current language
-    var navLinks = document.querySelectorAll('#site-nav .nav-list-link');
-    navLinks.forEach(function(link) {
-      var href = link.getAttribute('href');
-      if (href) {
-        var isZhCn = href.indexOf('/zh-cn/') !== -1;
-        var isEs = href.indexOf('/es/') !== -1;
-        var isEn = !isZhCn && !isEs;
-        var shouldShow = false;
-        if (currentLang === 'zh-cn' && isZhCn) shouldShow = true;
-        else if (currentLang === 'es' && isEs) shouldShow = true;
-        else if (currentLang === 'en' && isEn) shouldShow = true;
-        
-        if (!shouldShow) {
-          var listItem = link.closest('.nav-list-item');
-          if (listItem) {
-            listItem.style.display = 'none';
-          }
-        }
-      }
-    });
-
-    /* Add event to dark mode button. */
+    /* Add event to dark mode button first. */
     let buttons = document.getElementsByClassName('site-button');
     if (buttons.length > 2) {
       let a = buttons[2];
@@ -57,6 +26,7 @@
         });
       }
     }
+
 
     /* Read local storage state. */
     if (localStorage.getItem('darkMode') === 'true') {
