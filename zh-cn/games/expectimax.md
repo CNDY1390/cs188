@@ -18,7 +18,6 @@ $$\forall \text{agent-controlled states}, V(s) = \max_{s'\in successors(s)}V(s')
 $$\forall \text{chance states}, V(s) = \sum_{s'\in successors(s)}p(s'|s)V(s')$$
 
 $$\forall \text{terminal states}, V(s) = \text{known}$$
-
 <p>
 </p>
 在上述公式中，$$p(s'|s)$$ 指的是给定的非确定性动作导致从状态 $$s$$ 移动到 $$s'$$ 的概率，或者对手选择导致从状态 $$s$$ 移动到 $$s'$$ 的动作的概率，具体取决于游戏的具体情况和所考虑的博弈树。从这个定义中，我们可以看到 minimax 只是 expectimax 的一个特例。最小化节点只是机会节点，它们将其值最低的子节点的概率设为 1，将所有其他子节点的概率设为 0。通常，选择概率是为了正确反映我们要建模的游戏状态，但我们将在以后的笔记中更详细地介绍这个过程是如何工作的。目前，可以公平地假设这些概率只是固有的游戏属性。
