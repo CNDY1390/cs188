@@ -12,73 +12,56 @@ This file is called by sidebar.html (or default layout) to generate navigation
 {%- comment -%} 客户端语言检测和过滤 {%- endcomment -%}
 <script>
 (function() {
-  function filterNavByLanguage() {
-    var pathname = window.location.pathname;
-    var currentLang = 'en';
-    if (pathname.includes('/zh-cn/')) {
-      currentLang = 'zh-cn';
-    } else if (pathname.includes('/es/')) {
-      currentLang = 'es';
-    }
+  function getLang(path) {
+    if (path.indexOf('/zh-cn/') !== -1) return 'zh-cn';
+    if (path.indexOf('/es/') !== -1) return 'es';
+    return 'en';
+  }
+  
+  function filterNav() {
+    var currentLang = getLang(window.location.pathname);
+    var items = document.querySelectorAll('.nav-list > .nav-list-item');
     
-    function getItemLang(href) {
-      if (!href || href === '#') return null;
-      if (href.includes('/zh-cn/')) return 'zh-cn';
-      if (href.includes('/es/')) return 'es';
-      return 'en';
-    }
-    
-    function filterItem(item) {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
       var link = item.querySelector('.nav-list-link');
-      if (!link) return false;
+      if (!link) continue;
       
       var href = link.getAttribute('href');
-      var itemLang = getItemLang(href);
+      if (!href || href === '#') continue;
       
-      if (itemLang === null) {
+      var itemLang = getLang(href);
+      if (itemLang !== currentLang) {
+        item.style.display = 'none';
+      } else {
         var childList = item.querySelector('ul.nav-list');
         if (childList) {
           var childItems = childList.querySelectorAll('.nav-list-item');
-          var hasVisibleChild = false;
-          childItems.forEach(function(childItem) {
-            if (filterItem(childItem)) {
-              hasVisibleChild = true;
+          for (var j = 0; j < childItems.length; j++) {
+            var childLink = childItems[j].querySelector('.nav-list-link');
+            if (childLink) {
+              var childHref = childLink.getAttribute('href');
+              if (childHref && childHref !== '#') {
+                var childLang = getLang(childHref);
+                if (childLang !== currentLang) {
+                  childItems[j].style.display = 'none';
+                }
+              }
             }
-          });
-          return hasVisibleChild;
-        }
-        return true;
-      }
-      
-      if (itemLang !== currentLang) {
-        return false;
-      }
-      
-      var childList = item.querySelector('ul.nav-list');
-      if (childList) {
-        var childItems = childList.querySelectorAll('.nav-list-item');
-        childItems.forEach(function(childItem) {
-          if (!filterItem(childItem)) {
-            childItem.style.display = 'none';
           }
-        });
+        }
       }
-      
-      return true;
     }
-    
-    var navItems = document.querySelectorAll('.nav-list > .nav-list-item');
-    navItems.forEach(function(item) {
-      if (!filterItem(item)) {
-        item.style.display = 'none';
-      }
-    });
+  }
+  
+  function init() {
+    setTimeout(filterNav, 300);
   }
   
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', filterNavByLanguage);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    setTimeout(filterNavByLanguage, 100);
+    init();
   }
 })();
 </script>

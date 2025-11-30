@@ -36,44 +36,53 @@ Override the default Just the Docs children_nav.html to filter by language
 {%- comment -%} 客户端语言过滤：在 TABLE OF CONTENTS 后的列表中过滤 {%- endcomment -%}
 <script>
 (function() {
-  var pathname = window.location.pathname;
-  var currentLang = 'en';
-  if (pathname.includes('/zh-cn/')) {
-    currentLang = 'zh-cn';
-  } else if (pathname.includes('/es/')) {
-    currentLang = 'es';
+  function getLangFromPath(path) {
+    if (path.indexOf('/zh-cn/') !== -1) return 'zh-cn';
+    if (path.indexOf('/es/') !== -1) return 'es';
+    return 'en';
   }
   
-  var tocHeading = Array.from(document.querySelectorAll('h2')).find(function(h2) {
-    return h2.textContent.includes('TABLE OF CONTENTS');
-  });
-  if (!tocHeading) return;
-  
-  var list = tocHeading.nextElementSibling;
-  while (list && list.tagName !== 'UL') {
-    list = list.nextElementSibling;
-  }
-  if (!list) return;
-  
-  var links = list.querySelectorAll('a');
-  links.forEach(function(link) {
-    var href = link.getAttribute('href');
-    if (!href) return;
+  function filterChildrenNav() {
+    var pathname = window.location.pathname;
+    var currentLang = getLangFromPath(pathname);
     
-    var itemLang = 'en';
-    if (href.includes('/zh-cn/')) {
-      itemLang = 'zh-cn';
-    } else if (href.includes('/es/')) {
-      itemLang = 'es';
-    }
-    
-    if (itemLang !== currentLang) {
-      var listItem = link.closest('li');
-      if (listItem) {
-        listItem.style.display = 'none';
+    var headings = document.querySelectorAll('h2');
+    var tocHeading = null;
+    for (var i = 0; i < headings.length; i++) {
+      if (headings[i].textContent.indexOf('TABLE OF CONTENTS') !== -1) {
+        tocHeading = headings[i];
+        break;
       }
     }
-  });
+    if (!tocHeading) return;
+    
+    var list = tocHeading.nextElementSibling;
+    while (list && list.tagName !== 'UL') {
+      list = list.nextElementSibling;
+    }
+    if (!list) return;
+    
+    var links = list.querySelectorAll('a');
+    for (var i = 0; i < links.length; i++) {
+      var link = links[i];
+      var href = link.getAttribute('href');
+      if (!href) continue;
+      
+      var itemLang = getLangFromPath(href);
+      if (itemLang !== currentLang) {
+        var listItem = link.closest('li');
+        if (listItem) {
+          listItem.style.display = 'none';
+        }
+      }
+    }
+  }
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', filterChildrenNav);
+  } else {
+    setTimeout(filterChildrenNav, 100);
+  }
 })();
 </script>
 
