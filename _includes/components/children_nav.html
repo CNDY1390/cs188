@@ -1,41 +1,18 @@
 {%- comment -%} 
 Custom children_nav.html with language filtering
 Override the default Just the Docs children_nav.html to filter by language
+
+问题：page.url 在 includes 中不可靠，必须使用客户端过滤
+解决方案：先渲染所有子页面，由客户端 JavaScript 过滤
 {%- endcomment -%}
 
 {%- if page.has_children == false or page.has_toc == false -%}
   {%- assign nav_children = "" | split: "" -%}
 {%- else -%}
-  {%- comment -%} Get current language: use page.url (more reliable) {%- endcomment -%}
-  {%- assign current_lang = "en" -%}
-  {%- if page.url contains "/zh-cn/" -%}
-    {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page.url contains "/es/" -%}
-    {%- assign current_lang = "es" -%}
-  {%- elsif page.lang != nil and page.lang != "" -%}
-    {%- assign current_lang = page.lang -%}
-  {%- endif -%}
-
-  {%- comment -%} Get all pages and filter by language FIRST, then by parent {%- endcomment -%}
+  {%- comment -%} Get all pages and filter by parent (language filtering done by client) {%- endcomment -%}
   {%- assign all_pages = site[page.collection] | default: site.html_pages | where_exp: "item", "item.title != nil" -%}
-  {%- comment -%} Filter pages by language first {%- endcomment -%}
-  {%- assign filtered_pages = "" | split: "" -%}
-  {%- for item in all_pages -%}
-    {%- assign item_lang = "en" -%}
-    {%- if item.lang != nil and item.lang != "" -%}
-      {%- assign item_lang = item.lang -%}
-    {%- elsif item.path contains "zh-cn/" -%}
-      {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item.path contains "es/" -%}
-      {%- assign item_lang = "es" -%}
-    {%- endif -%}
-    {%- if current_lang == item_lang -%}
-      {%- assign filtered_pages = filtered_pages | push: item -%}
-    {%- endif -%}
-  {%- endfor -%}
-
-  {%- comment -%} Group filtered pages by parent {%- endcomment -%}
-  {%- assign nav_parenthood = filtered_pages | group_by: "parent" -%}
+  {%- comment -%} Group pages by parent {%- endcomment -%}
+  {%- assign nav_parenthood = all_pages | group_by: "parent" -%}
   {%- assign nav_parent_group = nav_parenthood | where_exp: "item", "item.name == page.title" | first -%}
   {%- if nav_parent_group -%}
     {%- assign nav_children = nav_parent_group.items -%}
@@ -55,6 +32,51 @@ Override the default Just the Docs children_nav.html to filter by language
 
 {% for nav_child in nav_children %}*   [{{ nav_child.title }}]({{ nav_child.url | relative_url }}){% if nav_child.summary %} - {{ nav_child.summary }}{% endif %}
 {% endfor %}
+
+{%- comment -%} 客户端语言过滤：在 TABLE OF CONTENTS 后的列表中过滤 {%- endcomment -%}
+<script>
+(function() {
+  var pathname = window.location.pathname;
+  var currentLang = 'en';
+  if (pathname.includes('/zh-cn/')) {
+    currentLang = 'zh-cn';
+  } else if (pathname.includes('/es/')) {
+    currentLang = 'es';
+  }
+  
+  var tocHeading = document.querySelector('h2:contains("TABLE OF CONTENTS")') || 
+                    Array.from(document.querySelectorAll('h2')).find(function(h2) {
+                      return h2.textContent.includes('TABLE OF CONTENTS');
+                    });
+  if (!tocHeading) return;
+  
+  var list = tocHeading.nextElementSibling;
+  while (list && list.tagName !== 'UL') {
+    list = list.nextElementSibling;
+  }
+  if (!list) return;
+  
+  var links = list.querySelectorAll('a');
+  links.forEach(function(link) {
+    var href = link.getAttribute('href');
+    if (!href) return;
+    
+    var itemLang = 'en';
+    if (href.includes('/zh-cn/')) {
+      itemLang = 'zh-cn';
+    } else if (href.includes('/es/')) {
+      itemLang = 'es';
+    }
+    
+    if (itemLang !== currentLang) {
+      var listItem = link.closest('li');
+      if (listItem) {
+        listItem.style.display = 'none';
+      }
+    }
+  });
+})();
+</script>
 
 {%- endif -%}
 
