@@ -60,7 +60,7 @@
     class="nav-list-item{% if is_active %} active{% endif %}{% if node_has_children %} has-children{% endif %}"
   >
     {%- if node_has_children -%}
-    <a href="#" class="nav-list-expander"
+    <a href="javascript:void(0)" class="nav-list-expander" onclick="toggleNavList(this); return false;"
       ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
     ></a>
     {%- endif -%}

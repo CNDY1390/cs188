@@ -5,10 +5,15 @@ This file is called by sidebar.html (or default layout) to generate navigation
 
 {%- comment -%} Filter by language - detect from URL path {%- endcomment -%}
 {%- assign current_lang = "en" -%}
-<!-- DEBUG: page.url={{ page.url }} -->
-{%- if page.url contains "/zh-cn/" -%}
+{%- assign page_path = page.url -%}
+{%- if site.baseurl and page_path contains site.baseurl -%}
+  {%- assign baseurl_len = site.baseurl | size -%}
+  {%- assign page_path = page_path | slice: baseurl_len, 999 -%}
+{%- endif -%}
+<!-- DEBUG: page.url={{ page.url }}, page_path={{ page_path }} -->
+{%- if page_path contains "/zh-cn/" or page.url contains "/zh-cn/" -%}
   {%- assign current_lang = "zh-cn" -%}
-{%- elsif page.url contains "/es/" -%}
+{%- elsif page_path contains "/es/" or page.url contains "/es/" -%}
   {%- assign current_lang = "es" -%}
 {%- endif -%}
 <!-- DEBUG: current_lang={{ current_lang }}, total_pages={{ site.html_pages | size }} -->
@@ -17,9 +22,14 @@ This file is called by sidebar.html (or default layout) to generate navigation
 {%- assign lang_filtered_pages = "" | split: "X" -%}
 {%- for item in site.html_pages -%}
   {%- assign item_lang = "en" -%}
-  {%- if item.url contains "/zh-cn/" -%}
+  {%- assign item_path = item.url -%}
+  {%- if site.baseurl and item_path contains site.baseurl -%}
+    {%- assign baseurl_len = site.baseurl | size -%}
+    {%- assign item_path = item_path | slice: baseurl_len, 999 -%}
+  {%- endif -%}
+  {%- if item_path contains "/zh-cn/" or item.url contains "/zh-cn/" -%}
     {%- assign item_lang = "zh-cn" -%}
-  {%- elsif item.url contains "/es/" -%}
+  {%- elsif item_path contains "/es/" or item.url contains "/es/" -%}
     {%- assign item_lang = "es" -%}
   {%- endif -%}
   {%- if item_lang == current_lang -%}
