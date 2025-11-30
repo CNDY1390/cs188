@@ -73,7 +73,7 @@
     assign children_list = children_list | reverse -%} {%- endif -%}
     {%- comment -%} Children already filtered by language in pages_list {%- endcomment -%}
     {%- assign filtered_children = children_list -%}
-    <ul class="nav-list">
+    <ul class="nav-list" style="display: none;">
       {%- for child in filtered_children -%} {%- include nav_list.html node=child
       depth=1 pages_list=pages_list -%} {%- comment -%} Hack to display anchors in the navbar for
       projects. Somewhat adapted from
