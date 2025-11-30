@@ -39,9 +39,9 @@ _翻译最后更新: 2025年10月2日（UTC+8）_
 
 ## 源代码与更新日志
 
-**英文原版:** 源代码: [BerkeleyAI/textbook](https://github.com/BerkeleyAI/textbook)
+**英文原版:** [源代码](https://github.com/BerkeleyAI/textbook)
 
-**简体中文版:** 源代码: [CNDY1390/CS188-textbook-multilingual](https://github.com/CNDY1390/CS188-textbook-multilingual)
+**简体中文版:** [源代码](https://github.com/CNDY1390/cs188)
 
 ## 许可证
 
