@@ -1,0 +1,30 @@
+{%- comment -%} 
+Override Just the Docs components/site_nav.html with language filtering
+This file is called by sidebar.html (or default layout) to generate navigation
+{%- endcomment -%}
+
+{%- comment -%} Filter by language FIRST - detect from URL path {%- endcomment -%}
+{%- assign current_lang = "en" -%}
+{%- if page.url contains "/zh-cn/" -%}
+  {%- assign current_lang = "zh-cn" -%}
+{%- elsif page.url contains "/es/" -%}
+  {%- assign current_lang = "es" -%}
+{%- endif -%}
+
+{%- comment -%} Filter site.html_pages by language {%- endcomment -%}
+{%- assign lang_filtered_pages = "" | split: "X" -%}
+{%- for item in site.html_pages -%}
+  {%- assign item_lang = "en" -%}
+  {%- if item.url contains "/zh-cn/" -%}
+    {%- assign item_lang = "zh-cn" -%}
+  {%- elsif item.url contains "/es/" -%}
+    {%- assign item_lang = "es" -%}
+  {%- endif -%}
+  {%- if item_lang == current_lang -%}
+    {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
+{% include nav.html pages=lang_filtered_pages key=nil %}
+

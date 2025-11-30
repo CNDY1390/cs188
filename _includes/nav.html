@@ -1,31 +1,6 @@
 <ul class="nav-list">
-  {%- comment -%} Filter by language FIRST before processing - detect from URL path {%- endcomment -%}
-  {%- assign current_lang = "en" -%}
-  {%- assign page_path = page.url -%}
-  {%- if page_path contains "/zh-cn/" -%}
-    {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page_path contains "/es/" -%}
-    {%- assign current_lang = "es" -%}
-  {%- endif -%}
-  {%- assign lang_filtered_pages = "" | split: "X" -%}
-  {%- assign debug_mismatch = "" | split: "X" -%}
-  {%- for item in include.pages -%}
-    {%- assign item_lang = "en" -%}
-    {%- assign item_path = item.url -%}
-    {%- if item_path contains "/zh-cn/" -%}
-      {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item_path contains "/es/" -%}
-      {%- assign item_lang = "es" -%}
-    {%- endif -%}
-    {%- comment -%} STRICT: Only include pages matching current language {%- endcomment -%}
-    {%- if item_lang == current_lang -%}
-      {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
-    {%- else -%}
-      {%- assign debug_mismatch = debug_mismatch | push: item.title -%}
-    {%- endif -%}
-  {%- endfor -%}
-  <!-- DEBUG: page.url={{ page_path }}, current_lang={{ current_lang }}, filtered={{ lang_filtered_pages | size }}, total={{ include.pages | size }}, mismatches={{ debug_mismatch | join: ", " }} -->
-  {%- assign titled_pages = lang_filtered_pages | where_exp:"item", "item.title !=
+  {%- comment -%} include.pages should already be filtered by language in components/site_nav.html {%- endcomment -%}
+  {%- assign titled_pages = include.pages | where_exp:"item", "item.title !=
   nil" -%} {%- comment -%} The values of `title` and `nav_order` can be numbers
   or strings. Jekyll gives build failures when sorting on mixtures of different
   types, so numbers and strings need to be sorted separately. Here, numbers are
@@ -60,7 +35,7 @@
   sorted_string_ordered_pages = sorted_string_ordered_pages | concat:
   group.items -%}   {%- endfor -%}   {%- assign pages_list =
   sorted_number_ordered_pages | concat: sorted_string_ordered_pages -%}
-  {%- comment -%} pages_list already filtered by language at the beginning {%- endcomment -%}
+  {%- comment -%} pages_list already filtered by language in components/site_nav.html {%- endcomment -%}
   {%- for
   node in pages_list -%} {%- if node.parent == nil -%}
   {%- comment -%} pages_list already filtered by language, so nav_exclude is ignored for current language {%- endcomment -%}
@@ -90,7 +65,7 @@
     {%- assign filtered_children = children_list -%}
     <ul class="nav-list">
       {%- for child in filtered_children -%} {%- include nav_list.html node=child
-      depth=1 -%} {%- comment -%} Hack to display anchors in the navbar for
+      depth=1 pages_list=pages_list -%} {%- comment -%} Hack to display anchors in the navbar for
       projects. Somewhat adapted from
       https://github.com/just-the-docs/just-the-docs/issues/325. Hopefully Just
       the Docs adds built-in support for this soon and obsoletes this hack. {%-
@@ -124,11 +99,6 @@ child.url or page.parent == child.title and page.grand_parent == child.parent
 endif -%} {%- endfor -%} {%- endif -%} {%- endif -%} {%- endfor -%} {% if
 page.has_children == true and page.has_toc != false %} {%- assign toc_list_raw =
 pages_list | where: "parent", page.title | where: "grand_parent", page.parent
--%} {%- comment -%} Filter toc_list by language {%- endcomment -%}
-{%- assign toc_list = "" | split: "X" -%}
-{%- for item in toc_list_raw -%}
-  {%- assign item_lang = item.lang | default: "en" -%}
-  {%- if current_lang == item_lang -%}
-    {%- assign toc_list = toc_list | push: item -%}
-  {%- endif -%}
-{%- endfor -%} {%- endif -%} {%- endif -%}
+-%} {%- assign toc_list = toc_list_raw -%}
+{%- comment -%} toc_list already filtered by language in pages_list {%- endcomment -%}
+{%- endif -%} {%- endif -%}

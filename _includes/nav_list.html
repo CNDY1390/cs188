@@ -10,37 +10,16 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
     >{{ include.node.title }}</a
   >
   {%- if include.node.has_children and include.depth <= site.max_nav_depth -%}
-  {%- comment -%} Get children - filter by language FIRST, then by parent {%- endcomment -%}
-  {%- assign current_lang = "en" -%}
-  {%- if page.url contains "/zh-cn/" -%}
-    {%- assign current_lang = "zh-cn" -%}
-  {%- elsif page.url contains "/es/" -%}
-    {%- assign current_lang = "es" -%}
-  {%- endif -%}
-  {%- comment -%} Filter all pages by language first {%- endcomment -%}
-  {%- assign all_pages = site.html_pages | where_exp: "item", "item.title != nil" -%}
-  {%- assign filtered_pages = "" | split: "X" -%}
-  {%- for item in all_pages -%}
-    {%- assign item_lang = "en" -%}
-    {%- if item.url contains "/zh-cn/" -%}
-      {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item.url contains "/es/" -%}
-      {%- assign item_lang = "es" -%}
-    {%- endif -%}
-    {%- if current_lang == item_lang -%}
-      {%- assign filtered_pages = filtered_pages | push: item -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- comment -%} Then filter by parent from language-filtered pages {%- endcomment -%}
+  {%- comment -%} Get children from pages_list (already filtered by language) {%- endcomment -%}
   {%- if include.node.child_nav_order == 'desc' -%} {%- assign children_list =
-  filtered_pages | where: "parent", include.node.title | reverse -%} {%- else -%}
-  {%- assign children_list = filtered_pages | where: "parent", include.node.title
+  include.pages_list | where: "parent", include.node.title | reverse -%} {%- else -%}
+  {%- assign children_list = include.pages_list | where: "parent", include.node.title
   -%} {%- endif -%}
   {%- assign filtered_children = children_list -%}
   {%- assign children_depth = include.depth | plus:1 -%}
   <ul class="nav-list child">
     {%- for child in filtered_children -%} {%- include nav_list.html node=child
-    depth=children_depth -%} {%- endfor -%}
+    depth=children_depth pages_list=include.pages_list -%} {%- endfor -%}
   </ul>
   {%- endif -%} {%- endunless -%}
 </li>
