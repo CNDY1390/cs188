@@ -6,11 +6,11 @@ Override the default Just the Docs children_nav.html to filter by language
 {%- if page.has_children == false or page.has_toc == false -%}
   {%- assign nav_children = "" | split: "" -%}
 {%- else -%}
-  {%- comment -%} Get current language from page.lang (set by _config.yml defaults) or URL path {%- endcomment -%}
-  {%- assign current_lang = page.lang | default: "en" -%}
-  {%- if current_lang == "en" and page.url contains "/zh-cn/" -%}
+  {%- comment -%} Get current language from URL path {%- endcomment -%}
+  {%- assign current_lang = "en" -%}
+  {%- if page.url contains "/zh-cn/" -%}
     {%- assign current_lang = "zh-cn" -%}
-  {%- elsif current_lang == "en" and page.url contains "/es/" -%}
+  {%- elsif page.url contains "/es/" -%}
     {%- assign current_lang = "es" -%}
   {%- endif -%}
 
@@ -19,10 +19,10 @@ Override the default Just the Docs children_nav.html to filter by language
   {%- comment -%} Filter pages by language first {%- endcomment -%}
   {%- assign filtered_pages = "" | split: "" -%}
   {%- for item in all_pages -%}
-    {%- assign item_lang = item.lang | default: "en" -%}
-    {%- if item_lang == "en" and item.url contains "/zh-cn/" -%}
+    {%- assign item_lang = "en" -%}
+    {%- if item.url contains "/zh-cn/" -%}
       {%- assign item_lang = "zh-cn" -%}
-    {%- elsif item_lang == "en" and item.url contains "/es/" -%}
+    {%- elsif item.url contains "/es/" -%}
       {%- assign item_lang = "es" -%}
     {%- endif -%}
     {%- if current_lang == item_lang -%}

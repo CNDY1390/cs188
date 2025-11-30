@@ -38,21 +38,14 @@
   window.addEventListener('DOMContentLoaded', () => {
     /* Add event to dark mode button. */
     let buttons = document.getElementsByClassName('site-button');
-    // Find Dark Mode button by checking href or text content
-    let darkModeButton = null;
-    for (let i = 0; i < buttons.length; i++) {
-      let btn = buttons[i];
-      let link = btn.closest('a');
-      if (link && (link.href === '#' || link.textContent.includes('Dark Mode'))) {
-        darkModeButton = link;
-        break;
+    if (buttons.length > 2) {
+      let a = buttons[2];
+      if (a) {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDark();
+        });
       }
-    }
-    if (darkModeButton) {
-      darkModeButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleDark();
-      });
     }
 
     /* Read local storage state. */
