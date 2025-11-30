@@ -3,27 +3,44 @@ Override Just the Docs components/site_nav.html with language filtering
 This file is called by sidebar.html (or default layout) to generate navigation
 {%- endcomment -%}
 
-{%- comment -%} Get current language from page.path (more reliable than page.url) {%- endcomment -%}
-{%- assign current_lang = "en" -%}
-{%- if page.path contains "zh-cn/" -%}
+{%- comment -%} Get current language: use page.lang first (from _config.yml defaults), fallback to path detection {%- endcomment -%}
+{%- assign current_lang = page.lang | default: "en" -%}
+{%- if current_lang == "" -%}
+  {%- assign current_lang = "en" -%}
+{%- endif -%}
+{%- if current_lang == "en" and page.path contains "zh-cn/" -%}
   {%- assign current_lang = "zh-cn" -%}
-{%- elsif page.path contains "es/" -%}
+{%- elsif current_lang == "en" and page.path contains "es/" -%}
   {%- assign current_lang = "es" -%}
 {%- endif -%}
 
-{%- comment -%} Filter site.html_pages by language using page.path {%- endcomment -%}
+{%- comment -%} DEBUG: Show what we're filtering {%- endcomment -%}
+<script>console.log('[site_nav] page.path={{ page.path }}, page.lang={{ page.lang }}, current_lang={{ current_lang }}');</script>
+
+{%- comment -%} Filter site.html_pages by language: use item.lang first, fallback to path {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
+{%- assign games_found = false -%}
 {%- for item in site.html_pages -%}
-  {%- assign item_lang = "en" -%}
-  {%- if item.path contains "zh-cn/" -%}
+  {%- assign item_lang = item.lang | default: "en" -%}
+  {%- if item_lang == "" -%}
+    {%- assign item_lang = "en" -%}
+  {%- endif -%}
+  {%- if item_lang == "en" and item.path contains "zh-cn/" -%}
     {%- assign item_lang = "zh-cn" -%}
-  {%- elsif item.path contains "es/" -%}
+  {%- elsif item_lang == "en" and item.path contains "es/" -%}
     {%- assign item_lang = "es" -%}
+  {%- endif -%}
+  {%- if item.title contains "Games" or item.title contains "博弈" -%}
+    <script>console.log('[site_nav] Found games item: path={{ item.path }}, title={{ item.title }}, item.lang={{ item.lang }}, detected={{ item_lang }}, current={{ current_lang }}');</script>
+    {%- if item_lang == current_lang -%}
+      {%- assign games_found = true -%}
+    {%- endif -%}
   {%- endif -%}
   {%- if item_lang == current_lang -%}
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
   {%- endif -%}
 {%- endfor -%}
+<script>console.log('[site_nav] Total pages: {{ site.html_pages | size }}, Filtered: {{ lang_filtered_pages | size }}, Games found: {{ games_found }}');</script>
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}
