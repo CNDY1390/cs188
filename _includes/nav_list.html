@@ -11,7 +11,7 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
     {%- assign node_has_children = true -%}
   {%- endif -%}
   {%- if node_has_children -%}
-  <a href="#" class="nav-list-expander" onclick="var li=this.closest('.nav-list-item');if(li){var ul=li.querySelector('ul.nav-list');if(ul){var isHidden=ul.style.display==='none'||!ul.style.display||getComputedStyle(ul).display==='none';ul.style.display=isHidden?'':'none';li.classList.toggle('active',!isHidden);}return false;"
+  <a href="#" class="nav-list-expander" onclick="var li=this.closest('.nav-list-item');if(li){var ul=li.querySelector('ul.nav-list');if(ul){var isHidden=ul.style.display==='none'||!ul.style.display;ul.style.display=isHidden?'':'none';li.classList.toggle('active',!isHidden);}return false;"
     ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
   ></a>
   {%- endif -%}

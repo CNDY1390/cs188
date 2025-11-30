@@ -26,41 +26,77 @@
   })();
 
   let toggleDark = () => {
-    let setDark = jtd.getTheme() !== 'dark';
-    document.documentElement.setAttribute(
-      'data-theme',
-      setDark ? 'dark' : 'default',
-    );
-    jtd.setTheme(setDark ? 'dark' : 'default');
-    localStorage.setItem('darkMode', String(setDark));
+    console.log('[DEBUG] toggleDark called');
+    try {
+      if (typeof jtd === 'undefined' || !jtd.getTheme) {
+        console.error('[DEBUG] jtd is not defined or getTheme is not available');
+        // Fallback: toggle data-theme directly
+        let currentTheme = document.documentElement.getAttribute('data-theme');
+        let setDark = currentTheme !== 'dark';
+        document.documentElement.setAttribute('data-theme', setDark ? 'dark' : 'default');
+        localStorage.setItem('darkMode', String(setDark));
+        console.log('[DEBUG] Toggled theme to:', setDark ? 'dark' : 'default');
+        return;
+      }
+      let setDark = jtd.getTheme() !== 'dark';
+      document.documentElement.setAttribute('data-theme', setDark ? 'dark' : 'default');
+      jtd.setTheme(setDark ? 'dark' : 'default');
+      localStorage.setItem('darkMode', String(setDark));
+      console.log('[DEBUG] Toggled theme to:', setDark ? 'dark' : 'default');
+    } catch (e) {
+      console.error('[DEBUG] Error in toggleDark:', e);
+    }
   };
 
   window.addEventListener('DOMContentLoaded', () => {
     /* Add event to dark mode button. */
-    // Find Dark Mode button - aux_links generate <a> tags with class "site-button"
-    // Skip menu-button (id="menu-button") and find the one with href="#"
+    console.log('[DEBUG] Looking for Dark Mode button...');
     let buttons = document.getElementsByClassName('site-button');
-    let darkModeButton = null;
+    console.log('[DEBUG] Found', buttons.length, 'site-button elements');
+    
+    // Log all buttons for debugging
     for (let i = 0; i < buttons.length; i++) {
       let btn = buttons[i];
-      // Skip menu-button
-      if (btn.id === 'menu-button') continue;
-      // aux_links generate <a> tags, check href and text
-      if (btn.tagName === 'A') {
-        let href = btn.getAttribute('href') || btn.href;
-        let text = btn.textContent.trim();
-        if ((href === '#' || href.endsWith('#')) && text === 'Dark Mode') {
-          darkModeButton = btn;
-          break;
-        }
-      }
-    }
-    if (darkModeButton) {
-      darkModeButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleDark();
+      console.log('[DEBUG] Button', i, ':', {
+        id: btn.id,
+        tagName: btn.tagName,
+        href: btn.href || btn.getAttribute('href'),
+        text: btn.textContent.trim(),
+        className: btn.className
       });
     }
+    
+    // Try original Berkeley method first (buttons[2])
+    if (buttons.length > 2) {
+      let btn = buttons[2];
+      console.log('[DEBUG] Trying buttons[2]:', btn);
+      if (btn && btn.tagName === 'A') {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log('[DEBUG] Dark Mode button clicked');
+          toggleDark();
+        });
+        console.log('[DEBUG] Dark Mode event listener attached to buttons[2]');
+        return;
+      }
+    }
+    
+    // Fallback: find by text content
+    for (let i = 0; i < buttons.length; i++) {
+      let btn = buttons[i];
+      if (btn.id === 'menu-button') continue;
+      if (btn.tagName === 'A' && btn.textContent.trim() === 'Dark Mode') {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          console.log('[DEBUG] Dark Mode button clicked (fallback)');
+          toggleDark();
+        });
+        console.log('[DEBUG] Dark Mode event listener attached (fallback)');
+        return;
+      }
+    }
+    
+    console.warn('[DEBUG] Dark Mode button not found!');
 
     /* Read local storage state. */
     if (localStorage.getItem('darkMode') === 'true') {
