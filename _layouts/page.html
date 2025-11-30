@@ -57,10 +57,13 @@ layout: default
 {% capture content %} {{ content_clean }} {% endcapture %}
 <div class="page">
   <nav class="content-nav nav-list js-toc" aria-label="In-page navigation">
-    {% include toc.html html=content sanitize=true item_class="nav-list-item"
-    anchor_class="nav-list-link" h_min=1 h_max=3 %}
   </nav>
-  <div class="content">{{ content }}{{ children_markdown }}</div>
+  <div class="content">
+    <div class="main-content">{{ content }}</div>
+    {%- if children_markdown != "" -%}
+    <div class="children-nav no_toc">{{ children_markdown }}</div>
+    {%- endif -%}
+  </div>
   {%- if children_content != "" -%}
   <script>
   (function() {
