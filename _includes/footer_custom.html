@@ -31,3 +31,43 @@
     scrollSmooth: false,
   });
 </script>
+
+<script>
+  // Handle nav-list-expander clicks
+  document.addEventListener('DOMContentLoaded', function() {
+    // Expand active items by default
+    var activeItems = document.querySelectorAll('.nav-list-item.active');
+    activeItems.forEach(function(item) {
+      var parent = item.closest('.nav-list-item.has-children');
+      if (parent) {
+        var childList = parent.querySelector('ul.nav-list');
+        if (childList) {
+          childList.style.display = '';
+          parent.classList.add('active');
+        }
+      }
+    });
+    
+    // Handle expander clicks
+    var expanders = document.querySelectorAll('.nav-list-expander');
+    expanders.forEach(function(expander) {
+      expander.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var listItem = this.closest('.nav-list-item');
+        if (listItem) {
+          var childList = listItem.querySelector('ul.nav-list');
+          if (childList) {
+            if (childList.style.display === 'none') {
+              childList.style.display = '';
+              listItem.classList.add('active');
+            } else {
+              childList.style.display = 'none';
+              listItem.classList.remove('active');
+            }
+          }
+        }
+      });
+    });
+  });
+</script>
