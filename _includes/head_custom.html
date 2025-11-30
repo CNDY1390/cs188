@@ -37,11 +37,16 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     /* Add event to dark mode button. */
-    let a = document.getElementsByClassName('site-button')[2];
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      toggleDark();
-    });
+    let buttons = document.getElementsByClassName('site-button');
+    if (buttons.length > 2) {
+      let a = buttons[2];
+      if (a) {
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleDark();
+        });
+      }
+    }
 
     /* Read local storage state. */
     if (localStorage.getItem('darkMode') === 'true') {
