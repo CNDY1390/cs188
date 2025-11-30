@@ -50,6 +50,7 @@
   {%- if children_list.size > 0 -%}
     {%- assign node_has_children = true -%}
   {%- endif -%}
+  <!-- DEBUG: node={{ node.title }}, has_children={{ node_has_children }}, children_count={{ children_list.size }} -->
   <li
     class="nav-list-item{% if page.collection == include.key and page.url == node.url or node.url == prefix %} active{% endif %}"
   >

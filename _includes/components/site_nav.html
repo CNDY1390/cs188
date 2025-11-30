@@ -5,11 +5,13 @@ This file is called by sidebar.html (or default layout) to generate navigation
 
 {%- comment -%} Filter by language - detect from URL path {%- endcomment -%}
 {%- assign current_lang = "en" -%}
+<!-- DEBUG: page.url={{ page.url }} -->
 {%- if page.url contains "/zh-cn/" -%}
   {%- assign current_lang = "zh-cn" -%}
 {%- elsif page.url contains "/es/" -%}
   {%- assign current_lang = "es" -%}
 {%- endif -%}
+<!-- DEBUG: current_lang={{ current_lang }}, total_pages={{ site.html_pages | size }} -->
 
 {%- comment -%} Filter site.html_pages by language {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
@@ -24,6 +26,7 @@ This file is called by sidebar.html (or default layout) to generate navigation
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
   {%- endif -%}
 {%- endfor -%}
+<!-- DEBUG: filtered_pages={{ lang_filtered_pages | size }} -->
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}
