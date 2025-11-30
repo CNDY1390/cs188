@@ -13,8 +13,13 @@ This file is called by sidebar.html (or default layout) to generate navigation
   {%- assign current_lang = page.lang -%}
 {%- endif -%}
 
+{%- comment -%} DEBUG {%- endcomment -%}
+<script>console.log('[site_nav] DEBUG: page.url={{ page.url }}, page.lang={{ page.lang }}, current_lang={{ current_lang }}');</script>
+
 {%- comment -%} Filter site.html_pages by language: use item.lang first, fallback to path {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
+{%- assign zh_cn_count = 0 -%}
+{%- assign en_count = 0 -%}
 {%- for item in site.html_pages -%}
   {%- assign item_lang = "en" -%}
   {%- if item.lang != nil and item.lang != "" -%}
@@ -24,10 +29,18 @@ This file is called by sidebar.html (or default layout) to generate navigation
   {%- elsif item.path contains "es/" -%}
     {%- assign item_lang = "es" -%}
   {%- endif -%}
+  {%- if item_lang == "zh-cn" -%}
+    {%- assign zh_cn_count = zh_cn_count | plus: 1 -%}
+  {%- elsif item_lang == "en" -%}
+    {%- assign en_count = en_count | plus: 1 -%}
+  {%- endif -%}
   {%- if item_lang == current_lang -%}
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
   {%- endif -%}
 {%- endfor -%}
+
+{%- comment -%} DEBUG {%- endcomment -%}
+<script>console.log('[site_nav] DEBUG: Total={{ site.html_pages | size }}, EN={{ en_count }}, ZH-CN={{ zh_cn_count }}, Filtered={{ lang_filtered_pages | size }}, Current={{ current_lang }}');</script>
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}
