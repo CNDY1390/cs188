@@ -11,6 +11,7 @@ This file is called by sidebar.html (or default layout) to generate navigation
 
 {%- comment -%} 客户端语言检测和过滤 {%- endcomment -%}
 <script>
+console.log('[site_nav] Script loading');
 (function() {
   console.log('[site_nav] Script started');
   
@@ -23,42 +24,26 @@ This file is called by sidebar.html (or default layout) to generate navigation
   function filterNav() {
     console.log('[site_nav] filterNav called');
     var currentLang = getLang(window.location.pathname);
-    console.log('[site_nav] Current lang:', currentLang, 'from path:', window.location.pathname);
+    console.log('[site_nav] Current lang:', currentLang, 'path:', window.location.pathname);
     
     var items = document.querySelectorAll('.nav-list > .nav-list-item');
-    console.log('[site_nav] Found', items.length, 'top-level nav items');
+    console.log('[site_nav] Found', items.length, 'items');
     
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
       var link = item.querySelector('.nav-list-link');
-      if (!link) {
-        console.log('[site_nav] Item', i, 'has no nav-list-link');
-        continue;
-      }
+      if (!link) continue;
       
       var href = link.getAttribute('href');
-      if (!href || href === '#') {
-        console.log('[site_nav] Item', i, 'has no href or href is #');
-        continue;
-      }
+      if (!href || href === '#') continue;
       
       var itemLang = getLang(href);
-      console.log('[site_nav] Item', i, 'lang:', itemLang, 'href:', href);
-      
       if (itemLang !== currentLang) {
-        console.log('[site_nav] Hiding item', i, 'lang mismatch');
         item.style.display = 'none';
       } else {
-        var expander = item.querySelector('.nav-list-expander');
-        if (expander) {
-          console.log('[site_nav] Item', i, 'has expander button');
-        }
-        
         var childList = item.querySelector('ul.nav-list');
         if (childList) {
-          console.log('[site_nav] Item', i, 'has child list, display:', childList.style.display);
           var childItems = childList.querySelectorAll('.nav-list-item');
-          console.log('[site_nav] Item', i, 'has', childItems.length, 'children');
           for (var j = 0; j < childItems.length; j++) {
             var childLink = childItems[j].querySelector('.nav-list-link');
             if (childLink) {
@@ -66,7 +51,6 @@ This file is called by sidebar.html (or default layout) to generate navigation
               if (childHref && childHref !== '#') {
                 var childLang = getLang(childHref);
                 if (childLang !== currentLang) {
-                  console.log('[site_nav] Hiding child', j, 'of item', i, 'lang mismatch');
                   childItems[j].style.display = 'none';
                 }
               }
@@ -76,87 +60,40 @@ This file is called by sidebar.html (or default layout) to generate navigation
       }
     }
     
-    // 检查展开按钮和事件绑定
+    // 绑定展开按钮点击事件
     var expanders = document.querySelectorAll('.nav-list-expander');
-    console.log('[site_nav] Found', expanders.length, 'expander buttons after filtering');
-    
+    console.log('[site_nav] Found', expanders.length, 'expanders');
     for (var k = 0; k < expanders.length; k++) {
       var exp = expanders[k];
-      var listItem = exp.closest('.nav-list-item');
-      var childList = listItem ? listItem.querySelector('ul.nav-list') : null;
-      
-      console.log('[site_nav] Expander', k, 'href:', exp.getAttribute('href'));
-      console.log('[site_nav] Expander', k, 'parent item:', listItem ? listItem.className : 'none');
-      console.log('[site_nav] Expander', k, 'child list:', childList ? 'found' : 'not found');
-      if (childList) {
-        console.log('[site_nav] Expander', k, 'child list display:', childList.style.display || 'default');
-        console.log('[site_nav] Expander', k, 'child list computed display:', window.getComputedStyle(childList).display);
-      }
-      
-      // 检查是否有事件监听器（通过检查是否有onclick属性）
-      var onclick = exp.getAttribute('onclick');
-      if (onclick) {
-        console.log('[site_nav] Expander', k, 'has onclick:', onclick);
-      } else {
-        console.log('[site_nav] Expander', k, 'no onclick attribute (relying on theme JS)');
-      }
-      
-      // 手动绑定事件来测试（作为备用方案）
       exp.addEventListener('click', function(e) {
-        console.log('[site_nav] Expander clicked!', e.target);
+        console.log('[site_nav] Expander clicked');
         e.preventDefault();
         e.stopPropagation();
-        
-        var clickedListItem = e.target.closest('.nav-list-item');
-        if (!clickedListItem) {
-          console.log('[site_nav] No list item found for clicked expander');
-          return;
-        }
-        
-        var clickedChildList = clickedListItem.querySelector('ul.nav-list');
-        if (!clickedChildList) {
-          console.log('[site_nav] No child list found for clicked expander');
-          return;
-        }
-        
-        var currentDisplay = window.getComputedStyle(clickedChildList).display;
-        console.log('[site_nav] Current computed display:', currentDisplay);
-        var isHidden = currentDisplay === 'none';
-        console.log('[site_nav] Is hidden:', isHidden);
-        
-        clickedChildList.style.display = isHidden ? 'block' : 'none';
-        clickedListItem.classList.toggle('active', isHidden);
-        
-        var newDisplay = window.getComputedStyle(clickedChildList).display;
-        console.log('[site_nav] After toggle, new display:', newDisplay);
-        console.log('[site_nav] List item active class:', clickedListItem.classList.contains('active'));
+        var listItem = e.target.closest('.nav-list-item');
+        if (!listItem) return;
+        var childList = listItem.querySelector('ul.nav-list');
+        if (!childList) return;
+        var isHidden = window.getComputedStyle(childList).display === 'none';
+        childList.style.display = isHidden ? 'block' : 'none';
+        listItem.classList.toggle('active', isHidden);
+        console.log('[site_nav] Toggled, display:', childList.style.display);
       });
-    }
-    
-    // 检查主题的JavaScript是否加载（Just-the-Docs可能使用事件委托）
-    console.log('[site_nav] Checking for theme JavaScript...');
-    var siteNav = document.getElementById('site-nav');
-    if (siteNav) {
-      console.log('[site_nav] Site nav element found:', siteNav);
-      // 检查是否有事件监听器（无法直接检查，但可以测试点击）
-    } else {
-      console.log('[site_nav] Site nav element not found!');
     }
   }
   
   function init() {
-    console.log('[site_nav] init called, readyState:', document.readyState);
+    console.log('[site_nav] init called');
     setTimeout(function() {
-      console.log('[site_nav] setTimeout callback executed');
+      console.log('[site_nav] setTimeout executed');
       filterNav();
     }, 300);
   }
   
   if (document.readyState === 'loading') {
-    console.log('[site_nav] Document loading, waiting for DOMContentLoaded');
+    console.log('[site_nav] Waiting for DOMContentLoaded');
     document.addEventListener('DOMContentLoaded', init);
   } else {
-    console.log('[site_nav] Document already loaded, calling init immediately');
+    console.log('[site_nav] Document ready, calling init');
     init();
   }
 })();
