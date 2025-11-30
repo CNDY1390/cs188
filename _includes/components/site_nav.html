@@ -3,27 +3,32 @@ Override Just the Docs components/site_nav.html with language filtering
 This file is called by sidebar.html (or default layout) to generate navigation
 {%- endcomment -%}
 
-{%- comment -%} Get current language from URL path (more reliable than page.lang) {%- endcomment -%}
+{%- comment -%} Get current language from URL path - try multiple detection methods {%- endcomment -%}
 {%- assign current_lang = "en" -%}
-{%- if page.url contains "/zh-cn/" -%}
+{%- assign page_path = page.path | default: page.url -%}
+{%- assign page_url_full = page.url | default: "" -%}
+{%- if page_path contains "zh-cn" or page_url_full contains "zh-cn" or page.url contains "zh-cn" -%}
   {%- assign current_lang = "zh-cn" -%}
-{%- elsif page.url contains "/es/" -%}
+{%- elsif page_path contains "es/" or page_url_full contains "es/" or page.url contains "es/" -%}
   {%- assign current_lang = "es" -%}
 {%- endif -%}
+<!-- DEBUG: page.path={{ page.path }}, page.url={{ page.url }}, current_lang={{ current_lang }} -->
 
 {%- comment -%} Filter site.html_pages by language {%- endcomment -%}
 {%- assign lang_filtered_pages = "" | split: "X" -%}
 {%- for item in site.html_pages -%}
   {%- assign item_lang = "en" -%}
-  {%- if item.url contains "/zh-cn/" -%}
+  {%- assign item_path = item.path | default: item.url -%}
+  {%- if item_path contains "zh-cn" or item.url contains "zh-cn" -%}
     {%- assign item_lang = "zh-cn" -%}
-  {%- elsif item.url contains "/es/" -%}
+  {%- elsif item_path contains "es/" or item.url contains "es/" -%}
     {%- assign item_lang = "es" -%}
   {%- endif -%}
   {%- if item_lang == current_lang -%}
     {%- assign lang_filtered_pages = lang_filtered_pages | push: item -%}
   {%- endif -%}
 {%- endfor -%}
+<!-- DEBUG: total={{ site.html_pages | size }}, filtered={{ lang_filtered_pages | size }} -->
 
 {%- comment -%} Use our custom nav.html with filtered pages {%- endcomment -%}
 {% include nav.html pages=lang_filtered_pages key=nil %}
