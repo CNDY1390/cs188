@@ -11,9 +11,7 @@ This file is called by sidebar.html (or default layout) to generate navigation
 
 {%- comment -%} 客户端语言检测和过滤 {%- endcomment -%}
 <script>
-try {
-  console.log('[site_nav] Script executing');
-  
+(function() {
   function getLang(path) {
     if (path.indexOf('/zh-cn/') !== -1) return 'zh-cn';
     if (path.indexOf('/es/') !== -1) return 'es';
@@ -21,12 +19,8 @@ try {
   }
   
   function filterNav() {
-    console.log('[site_nav] filterNav start');
     var currentLang = getLang(window.location.pathname);
-    console.log('[site_nav] lang:', currentLang);
-    
     var items = document.querySelectorAll('.nav-list > .nav-list-item');
-    console.log('[site_nav] items:', items.length);
     
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
@@ -58,11 +52,9 @@ try {
     }
     
     var expanders = document.querySelectorAll('.nav-list-expander');
-    console.log('[site_nav] expanders:', expanders.length);
     for (var k = 0; k < expanders.length; k++) {
       var exp = expanders[k];
       exp.addEventListener('click', function(e) {
-        console.log('[site_nav] click');
         e.preventDefault();
         e.stopPropagation();
         var listItem = e.target.closest('.nav-list-item');
@@ -77,22 +69,17 @@ try {
   }
   
   function run() {
-    console.log('[site_nav] run, readyState:', document.readyState);
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('[site_nav] DOMContentLoaded');
         setTimeout(filterNav, 200);
       });
     } else {
-      console.log('[site_nav] already ready');
       setTimeout(filterNav, 200);
     }
   }
   
   run();
-} catch(e) {
-  console.error('[site_nav] Error:', e);
-}
+})();
 </script>
 
 
