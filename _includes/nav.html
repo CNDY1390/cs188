@@ -43,10 +43,17 @@
   node.released == false and jekyll.environment != "debug"
   -%} {%- assign url_size = node.url | size -%} {%- assign prefix = page.url |
   slice: 0, url_size -%}
+  {%- comment -%} Check if node has children in filtered pages_list {%- endcomment -%}
+  {%- assign children_list = pages_list | where: "parent", node.title |
+  where_exp:"item", "item.grand_parent == nil" -%}
+  {%- assign node_has_children = false -%}
+  {%- if children_list.size > 0 -%}
+    {%- assign node_has_children = true -%}
+  {%- endif -%}
   <li
     class="nav-list-item{% if page.collection == include.key and page.url == node.url or node.url == prefix %} active{% endif %}"
   >
-    {%- if node.has_children -%}
+    {%- if node_has_children -%}
     <a href="#" class="nav-list-expander"
       ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
     ></a>
@@ -56,11 +63,8 @@
       class="nav-list-link{% if page.url == node.url %} active{% endif %}"
       >{{ node.title }}</a
     >
-    {%- if node.has_children -%} {%- if node.child_nav_order == 'desc' -%} {%-
-    assign children_list = pages_list | where: "parent", node.title |
-    where_exp:"item", "item.grand_parent == nil" | reverse -%} {%- else -%} {%-
-    assign children_list = pages_list | where: "parent", node.title |
-    where_exp:"item", "item.grand_parent == nil" -%} {%- endif -%}
+    {%- if node_has_children -%} {%- if node.child_nav_order == 'desc' -%} {%-
+    assign children_list = children_list | reverse -%} {%- endif -%}
     {%- comment -%} Children already filtered by language in pages_list {%- endcomment -%}
     {%- assign filtered_children = children_list -%}
     <ul class="nav-list">

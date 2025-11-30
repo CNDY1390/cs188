@@ -4,7 +4,13 @@ jekyll.environment != "debug" -%} {%- assign include.node_url_size =
 include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
 {%- assign prefix = page.url | slice: 0, url_size -%}
 <li class="nav-list-item {% if include.node.url == prefix %} active{% endif %}">
-  {%- if include.node.has_children -%}
+  {%- comment -%} Check if node has children in filtered pages_list {%- endcomment -%}
+  {%- assign children_list = include.pages_list | where: "parent", include.node.title -%}
+  {%- assign node_has_children = false -%}
+  {%- if children_list.size > 0 and include.depth <= site.max_nav_depth -%}
+    {%- assign node_has_children = true -%}
+  {%- endif -%}
+  {%- if node_has_children -%}
   <a href="#" class="nav-list-expander"
     ><svg viewBox="0 0 24 24"><use xlink:href="#svg-arrow-right"></use></svg
   ></a>
@@ -14,12 +20,9 @@ include.node.url | size -%} {%- assign url_size = include.node.url | size -%}
     class="nav-list-link{% if page.url == include.node.url %} active{% endif %}"
     >{{ include.node.title }}</a
   >
-  {%- if include.node.has_children and include.depth <= site.max_nav_depth -%}
-  {%- comment -%} Get children from pages_list (already filtered by language) {%- endcomment -%}
+  {%- if node_has_children -%}
   {%- if include.node.child_nav_order == 'desc' -%} {%- assign children_list =
-  include.pages_list | where: "parent", include.node.title | reverse -%} {%- else -%}
-  {%- assign children_list = include.pages_list | where: "parent", include.node.title
-  -%} {%- endif -%}
+  children_list | reverse -%} {%- endif -%}
   {%- assign filtered_children = children_list -%}
   {%- assign children_depth = include.depth | plus:1 -%}
   <ul class="nav-list child">
