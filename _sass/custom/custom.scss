@@ -1,32 +1,3 @@
-// Sidebar navigation scroll and text alignment (global)
-.side-bar {
-  display: flex !important;
-  flex-direction: column !important;
-  height: 100vh !important;
-}
-
-.site-header {
-  flex-shrink: 0 !important;
-}
-
-.site-nav {
-  flex: 1 !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  text-align: left !important;
-  min-height: 0 !important;
-}
-
-.site-footer {
-  flex-shrink: 0 !important;
-}
-
-.site-nav .nav-list,
-.site-nav .nav-list-item,
-.site-nav .nav-list-link {
-  text-align: left !important;
-}
-
 .algorithm p {
   margin-top: 0;
   margin-bottom: 0;
@@ -84,25 +55,6 @@ code[style*="color: red"] {
     position: fixed;  // Sticky header (stays on top as you scroll)
     top: 0;           // Forces header on top of page
     z-index: 1000;    // Forces header drawn on top of everything else
-  }
-
-  // Forces site title in sidebar to be flush with header
-  .side-bar {
-    top: 0;
-    left: 0;
-  }
-
-  .site-header {
-    flex-shrink: 0;
-  }
-
-  // Sidebar navigation scroll support
-  .site-nav {
-    min-height: 0;
-  }
-
-  .site-footer {
-    flex-shrink: 0;
   }
 
   // Add whitespace between header and start of content (site title, logo)
