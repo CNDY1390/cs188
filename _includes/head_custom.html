@@ -37,21 +37,22 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     /* Add event to dark mode button. */
-    // Find Dark Mode button by checking all site-buttons
+    // Find Dark Mode button - aux_links generate <a> tags with class "site-button"
+    // Skip menu-button (id="menu-button") and find the one with href="#"
     let buttons = document.getElementsByClassName('site-button');
     let darkModeButton = null;
     for (let i = 0; i < buttons.length; i++) {
       let btn = buttons[i];
-      // Check if it's a link (aux_links generate <a> tags)
-      if (btn.tagName === 'A' && (btn.href === '#' || btn.href.endsWith('#') || btn.textContent.trim() === 'Dark Mode')) {
-        darkModeButton = btn;
-        break;
-      }
-      // Also check parent if it's wrapped
-      let parent = btn.closest('a');
-      if (parent && (parent.href === '#' || parent.href.endsWith('#') || parent.textContent.trim() === 'Dark Mode')) {
-        darkModeButton = parent;
-        break;
+      // Skip menu-button
+      if (btn.id === 'menu-button') continue;
+      // aux_links generate <a> tags, check href and text
+      if (btn.tagName === 'A') {
+        let href = btn.getAttribute('href') || btn.href;
+        let text = btn.textContent.trim();
+        if ((href === '#' || href.endsWith('#')) && text === 'Dark Mode') {
+          darkModeButton = btn;
+          break;
+        }
       }
     }
     if (darkModeButton) {
