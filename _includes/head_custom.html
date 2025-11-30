@@ -5,7 +5,8 @@
 ></script>
 <script>
   // Global function for nav-list-expander clicks - must be defined before HTML renders
-  function toggleNavList(expander) {
+  // Use window.toggleNavList to ensure global scope
+  window.toggleNavList = function(expander) {
     var listItem = expander.closest('.nav-list-item');
     if (listItem) {
       var childList = listItem.querySelector('ul.nav-list');
@@ -20,6 +21,11 @@
       }
     }
     return false;
+  };
+  
+  // Also define as regular function for compatibility
+  function toggleNavList(expander) {
+    return window.toggleNavList(expander);
   }
 
   let toggleDark = () => {
