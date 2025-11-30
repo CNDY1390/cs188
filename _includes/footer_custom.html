@@ -31,38 +31,3 @@
     scrollSmooth: false,
   });
 </script>
-
-<script>
-  // Global function for nav-list-expander clicks
-  function toggleNavList(expander) {
-    var listItem = expander.closest('.nav-list-item');
-    if (listItem) {
-      var childList = listItem.querySelector('ul.nav-list');
-      if (childList) {
-        if (childList.style.display === 'none' || !childList.style.display) {
-          childList.style.display = '';
-          listItem.classList.add('active');
-        } else {
-          childList.style.display = 'none';
-          listItem.classList.remove('active');
-        }
-      }
-    }
-    return false;
-  }
-  
-  // Expand active items by default
-  document.addEventListener('DOMContentLoaded', function() {
-    var activeItems = document.querySelectorAll('.nav-list-item.active');
-    activeItems.forEach(function(item) {
-      var parent = item.closest('.nav-list-item.has-children');
-      if (parent) {
-        var childList = parent.querySelector('ul.nav-list');
-        if (childList) {
-          childList.style.display = '';
-          parent.classList.add('active');
-        }
-      }
-    });
-  });
-</script>

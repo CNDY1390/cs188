@@ -4,6 +4,24 @@
   src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"
 ></script>
 <script>
+  // Global function for nav-list-expander clicks - must be defined before HTML renders
+  function toggleNavList(expander) {
+    var listItem = expander.closest('.nav-list-item');
+    if (listItem) {
+      var childList = listItem.querySelector('ul.nav-list');
+      if (childList) {
+        if (childList.style.display === 'none' || !childList.style.display) {
+          childList.style.display = '';
+          listItem.classList.add('active');
+        } else {
+          childList.style.display = 'none';
+          listItem.classList.remove('active');
+        }
+      }
+    }
+    return false;
+  }
+
   let toggleDark = () => {
     let setDark = jtd.getTheme() !== 'dark';
     document.documentElement.setAttribute(
@@ -29,5 +47,18 @@
     } else {
       document.documentElement.setAttribute('data-theme', 'default');
     }
+
+    // Expand active items by default
+    var activeItems = document.querySelectorAll('.nav-list-item.active');
+    activeItems.forEach(function(item) {
+      var parent = item.closest('.nav-list-item.has-children');
+      if (parent) {
+        var childList = parent.querySelector('ul.nav-list');
+        if (childList) {
+          childList.style.display = '';
+          parent.classList.add('active');
+        }
+      }
+    });
   });
 </script>
