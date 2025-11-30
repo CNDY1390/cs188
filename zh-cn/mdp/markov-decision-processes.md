@@ -3,7 +3,7 @@ title: 4.1 马尔可夫决策过程
 parent: 4. MDPs
 nav_order: 1
 layout: page
-lang: zh-cn
+ 
 header-includes:
     \pagenumbering{gobble}
 ---

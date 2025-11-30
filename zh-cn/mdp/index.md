@@ -2,7 +2,7 @@
 title: 4. MDPs
 nav_order: 4
 has_children: true
-lang: zh-cn
+ 
 header-includes:
     \pagenumbering{gobble}
 ---

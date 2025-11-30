@@ -3,7 +3,7 @@ title: 2.1 约束满足问题
 parent: 2. CSPs
 nav_order: 1
 layout: page
-lang: zh-cn
+ 
 header-includes:
     \pagenumbering{gobble}
 ---

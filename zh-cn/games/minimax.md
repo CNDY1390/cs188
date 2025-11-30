@@ -3,9 +3,10 @@ title: 3.2 Minimax
 parent: 3. 博弈
 nav_order: 2
 layout: page
+ 
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 3.2 Minimax

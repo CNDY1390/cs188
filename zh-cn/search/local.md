@@ -5,7 +5,7 @@ nav_order: 5
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.5 Local Search (局部搜索)

@@ -5,7 +5,7 @@ nav_order: 6
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.6 Summary (本章小结)

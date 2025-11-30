@@ -2,7 +2,7 @@
 title: 1. 搜索
 nav_order: 1
 has_children: true
-lang: zh-cn
+ 
 header-includes:
     \pagenumbering{gobble}
 ---

@@ -5,7 +5,7 @@ nav_order: 2
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.2 State Spaces and Search Problems (状态空间与搜索问题)

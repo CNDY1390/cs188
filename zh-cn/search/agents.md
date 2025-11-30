@@ -5,7 +5,7 @@ nav_order: 1
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.1 Agents (智能体)

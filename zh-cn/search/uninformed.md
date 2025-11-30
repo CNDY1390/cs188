@@ -5,7 +5,7 @@ nav_order: 3
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.3 Uninformed Search (无信息搜索)

@@ -5,7 +5,7 @@ nav_order: 4
 layout: page
 header-includes:
     \pagenumbering{gobble}
-lang: zh-cn
+ 
 ---
 
 # 1.4 Informed Search (有信息搜索)
