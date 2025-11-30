@@ -28,12 +28,10 @@ Override the default Just the Docs children_nav.html to filter by language
 
 * * *
 
-{% include toc_heading_custom.html %}
-
 {% for nav_child in nav_children %}*   [{{ nav_child.title }}]({{ nav_child.url | relative_url }}){% if nav_child.summary %} - {{ nav_child.summary }}{% endif %}
 {% endfor %}
 
-{%- comment -%} 客户端语言过滤：在 TABLE OF CONTENTS 后的列表中过滤 {%- endcomment -%}
+{%- comment -%} 客户端语言过滤：在子页面列表中过滤 {%- endcomment -%}
 <script>
 (function() {
   function getLangFromPath(path) {
@@ -46,23 +44,23 @@ Override the default Just the Docs children_nav.html to filter by language
     var pathname = window.location.pathname;
     var currentLang = getLangFromPath(pathname);
     
-    var headings = document.querySelectorAll('h2');
-    var tocHeading = null;
-    for (var i = 0; i < headings.length; i++) {
-      if (headings[i].textContent.indexOf('TABLE OF CONTENTS') !== -1) {
-        tocHeading = headings[i];
-        break;
+    var hrElements = document.querySelectorAll('hr');
+    var targetList = null;
+    for (var i = 0; i < hrElements.length; i++) {
+      var nextSibling = hrElements[i].nextElementSibling;
+      while (nextSibling) {
+        if (nextSibling.tagName === 'UL') {
+          targetList = nextSibling;
+          break;
+        }
+        nextSibling = nextSibling.nextElementSibling;
       }
+      if (targetList) break;
     }
-    if (!tocHeading) return;
     
-    var list = tocHeading.nextElementSibling;
-    while (list && list.tagName !== 'UL') {
-      list = list.nextElementSibling;
-    }
-    if (!list) return;
+    if (!targetList) return;
     
-    var links = list.querySelectorAll('a');
+    var links = targetList.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
       var link = links[i];
       var href = link.getAttribute('href');
