@@ -8,15 +8,15 @@ components/site_nav.html, nav_footer_custom.html Overwrites: nav_footer_custom.
 Should not be cached, because nav_footer_custom.html might depend on page. {%-
 endcomment -%}
 
-<div class="side-bar" style="display: flex; flex-direction: column; height: 100vh;">
+<div class="side-bar" style="display: flex !important; flex-direction: column !important; height: 100vh !important;">
   <style>
     .side-bar .site-nav .nav-list,
     .side-bar .site-nav .nav-list-item,
     .side-bar .site-nav .nav-list-link {
-      text-align: left;
+      text-align: left !important;
     }
   </style>
-  <div class="site-header" role="banner" style="flex-shrink: 0;">
+  <div class="site-header" role="banner" style="flex-shrink: 0 !important;">
     <a href="{{ '/' | relative_url }}" class="site-title lh-tight"
       >{% include title.html %}</a
     >
@@ -39,13 +39,13 @@ endcomment -%}
   impact for Berkeley CS sized websites though (<100 pages in the navbar). {%-
   endcomment -%}
   {%- comment -%} Language-aware navigation - use components/site_nav.html {%- endcomment -%}
-  <nav aria-label="Main" id="site-nav" class="site-nav" style="flex: 1; overflow-y: auto; overflow-x: hidden; text-align: left; min-height: 0;">
+  <nav aria-label="Main" id="site-nav" class="site-nav" style="flex: 1 !important; overflow-y: auto !important; overflow-x: hidden !important; text-align: left !important; min-height: 0 !important;">
     {% include components/site_nav.html %}
   </nav>
   {% capture
   nav_footer_custom %} {%- include nav_footer_custom.html -%} {% endcapture %}
   {% if nav_footer_custom != "" %} {{ nav_footer_custom }} {% else %}
-  <footer class="site-footer" style="flex-shrink: 0;">
+  <footer class="site-footer" style="flex-shrink: 0 !important;">
     This site uses
     <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>,
     a documentation theme for Jekyll.
